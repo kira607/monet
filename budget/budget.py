@@ -3,12 +3,16 @@ from budget.transaction import Transaction
 import datetime
 
 class Budget:
+    '''
+    Here will take place all 
+    planning, filtering, editing, defaulting, etc.
+    '''
     def __init__(self, storage: Storage):
         self.storage = storage
 
     def add_transaction(self, from_, to, value):
         transaction = Transaction(from_, to, value, self.__now())
-        self.storage.save(transaction)
+        self.storage.add(transaction)
         return transaction
 
     @staticmethod
