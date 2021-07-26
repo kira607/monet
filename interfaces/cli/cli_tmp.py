@@ -1,4 +1,10 @@
 from abc import abstractmethod
+from budget.transaction import Transaction
+
+# some_file.py
+import sys
+# insert at 1, 0 is the script path (or '' in REPL)
+sys.path.insert(1, '/home/kirill/programming/budget/')
 
 class Option:
     command: str
@@ -25,7 +31,14 @@ class Option:
 class AddTransaction(Option):
     def _process(self):
         print('add transaction')
+        t = self.__input_transaction()
+        self.budget_ref.add_transaction(t)
 
+    def __input_transaction(self):
+        from_ = input('From:')
+        to = input('To: ')
+        value = float(input('Value: '))
+        return Transaction(from_, to, value)
 
 class ShowAssets(Option):
     def _process(self):
@@ -92,7 +105,7 @@ from budget.budget import Budget
 from budget.storage.csv.csv_storage import CsvStorage
 
 if __name__ == '__main__':
-    path_to_storage = '/home/kirill/programming/budget-app/storage.csv'
+    path_to_storage = '/home/kirill/programming/budget/storage.csv'
     storage = CsvStorage(path_to_storage)
     budget = Budget(storage)
 
