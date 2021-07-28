@@ -8,11 +8,11 @@ class Storage(ABC):
         pass
 
     @abstractmethod
-    def add(self, transacton: Transaction):
+    def add(self, transaction: Transaction):
         pass
 
     @abstractmethod
-    def delete(self, *, transaction_id: str = None, filters: List[filter] = []):
+    def delete(self, *, transaction_id: str = None, filters: List[filter] = None):
         pass
 
     @abstractmethod

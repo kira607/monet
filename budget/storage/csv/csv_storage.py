@@ -14,10 +14,11 @@ class CsvStorage(Storage):
 
     def add(self, transaction: Transaction):
         t = transaction.dict()
+        print(transaction.dict())
         self.df = self.df.append(transaction.dict(), ignore_index=True)
         self.__save()
 
-    def delete(self, *, transaction_id: str = None, filters: List[filter] = []):
+    def delete(self, *, transaction_id: str = None, filters: List[filter] = None):
         pass
 
     def get(self, *, filters: List[filter]):
