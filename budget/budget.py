@@ -2,6 +2,7 @@ from budget.storage.common.storage import Storage
 from budget.transaction import Transaction
 import datetime
 
+
 class Budget:
     '''
     Here will take place all 
@@ -17,4 +18,4 @@ class Budget:
 
     @staticmethod
     def __now():
-        return datetime.datetime.now()
+        return datetime.datetime.now().strftime('%d-%m-%Y')
