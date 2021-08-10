@@ -1,57 +1,69 @@
 from datetime import datetime
+from typing import Union
 
-from .asset import Asset
 from .common.utils import gen_id
 
 
-transaction_conf = {
-    'transaction_id': str,
-    'asset_from_id': str,
-    'asset_to_id': str,
-    'value': float,
-    'plan_value': float,
-    'pay_date': datetime,
-    'start_date': datetime,
-    'due_date': datetime,
-}
+class DateTime:
+    def __init__(
+            self,
+            year: int = 1,
+            month: int = 1,
+            day: int = 1,
+            *,
+            dt: datetime = None
+    ):
+        self.__format = '%d-%m-%Y'
+        self.__dt = datetime(year, month, day) or dt
+
+    def __str__(self):
+        return self.__dt.strftime(self.__format)
 
 
 class Transaction:
-    transaction_id = gen_id('T-')
-    asset_from_id: Asset = None
-    asset_to_id: Asset = None  # category
-    value: float = 0.0
-    pay_date: datetime = None
-    start_date = None
-    due_date = None
+    value: float = Field(float)
+    fields_types = {
+        'id': str,
+        'name': str,
+        'from_id': str,
+        'to_id': str,
+        'value': float,
+        'pay_date': DateTime,
+        'start_date': DateTime,
+        'due_date': DateTime,
+        'planned_value': float,
+        'comment': str,
+    }
 
-    def __init__(self, from_, to, value, date):
-        self.asset_from_id = from_
-        self.asset_to_id = to
+    def __init__(
+            self,
+            from_id: str,
+            to_id: str,
+            value: float,
+            date: Union[DateTime, datetime],
+    ):
+        self.__init_fields()
+        self.id = gen_id('T-')
+        self.from_id = from_id
+        self.to_id = to_id
         self.value = value
-        self.pay_date = date
-        setattr(self, 'plan_value', 4)
+        self.pay_date = date if isinstance(date, DateTime) else DateTime(dt=date)
 
-    @property
     def dict(self):
-        return {
-            'transaction_id': self.transaction_id,
-            'asset_from_id': self.asset_from_id,
-            'asset_to_id': self.asset_to_id,
-            'value': self.value,
-            'pay_date': self.pay_date,
-            'start_date': self.start_date,
-            'due_date': self.due_date,
-        }
+        d = {}
+        for fn, _ in self.__dict__.items():
+            d[fn] = getattr(self, fn)
+        return d
 
-    @property
-    def list(self):
-        return (
-            self.transaction_id,
-            self.asset_from_id,
-            self.asset_to_id,
-            self.value,
-            self.pay_date,
-            self.start_date,
-            self.due_date,
-        )
+    def __init_fields(self):
+        self.id = str()
+        self.name = str()
+        self.from_id = str()
+        self.to_id = str()
+        self.value = float()
+        self.pay_date = DateTime()
+        self.start_date = DateTime()
+        self.due_date = DateTime()
+        self.planned_value = float()
+        self.comment = str()
+

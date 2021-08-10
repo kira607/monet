@@ -1,0 +1,12 @@
+{
+  "id": "T-this01",
+  "name": "buy carrots",
+  "from_id": 0,
+  "to_id": 0,
+  "value": 100,
+  "pay_date": "09-08-2022",
+  "start_date": "07-08-2021",
+  "due_date": "07-09-2022",
+  "planned_value": 150,
+  "comment": ""
+}
