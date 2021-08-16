@@ -1,6 +1,6 @@
 from abc import abstractmethod
 from budget.budget import Budget
-from budget.transaction import Transaction
+
 
 class Option:
     command: str

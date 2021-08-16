@@ -6,8 +6,8 @@ from typing import List
 from pandas import DataFrame
 
 from budget.common.utils import gen_id
-from budget.storage.common.storage import Storage
-from budget.transaction import Transaction
+from budget.endpoint.common.__base_endpoint import BaseEndpoint
+from budget.models.transaction import Transaction
 
 
 class Query:
@@ -29,7 +29,7 @@ class Query:
         return 0
 
 
-class TestCsvStorage(Storage):
+class TestCsvEndpoint(BaseEndpoint):
     df = None
 
     def __init__(self, file_path: str):
@@ -79,9 +79,37 @@ class TestCsvStorage(Storage):
 
 
 path_to_storage = os.path.join(os.getcwd(), '.data/test.csv')
-storage = TestCsvStorage(path_to_storage)
+storage = TestCsvEndpoint(path_to_storage)
 t = Transaction('1', '2', 3, datetime.now().strftime('%d-%m-%Y'))
 storage.add(t)
 print(t.plan_value)
 # storage.delete(transaction_id='T-1IxIed')
 storage.get()
+
+
+
+import sqlite3
+
+try:
+    sqlite_connection = sqlite3.connect('.data/sqlite_python.db')
+    sqlite_create_table_query = '''CREATE TABLE sqlitedb_developers (
+                                id INTEGER PRIMARY KEY,
+                                name TEXT NOT NULL,
+                                email text NOT NULL UNIQUE,
+                                joining_date datetime,
+                                salary REAL NOT NULL);'''
+
+    cursor = sqlite_connection.cursor()
+    print("База данных подключена к SQLite")
+    cursor.execute(sqlite_create_table_query)
+    sqlite_connection.commit()
+    print("Таблица SQLite создана")
+
+    cursor.close()
+
+except sqlite3.Error as error:
+    print("Ошибка при подключении к sqlite", error)
+finally:
+    if (sqlite_connection):
+        sqlite_connection.close()
+        print("Соединение с SQLite закрыто")

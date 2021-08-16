@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from .asset import Asset
-from .common.utils import gen_id
+from budget.models.account import Account
+from budget.common.utils import gen_id
 
 
 transaction_conf = {
@@ -18,8 +18,8 @@ transaction_conf = {
 
 class Transaction:
     transaction_id = gen_id('T-')
-    asset_from_id: Asset = None
-    asset_to_id: Asset = None  # category
+    asset_from_id: Account = None
+    asset_to_id: Account = None  # category
     value: float = 0.0
     pay_date: datetime = None
     start_date = None

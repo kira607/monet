@@ -1,11 +1,9 @@
-import os
-from interfaces.cli import Cli
-from budget import Budget, CsvStorage
+from budget import Budget
+from config import Interface, Storage, storage_path
 
 if __name__ == '__main__':
-    path_to_storage = os.path.join(os.getcwd(), '.data/transactions.csv')
-    storage = CsvStorage(path_to_storage)
+    storage = Storage(storage_path)
     budget = Budget(storage)
-    interface = Cli(budget)
+    interface = Interface(budget)
 
     interface.run()

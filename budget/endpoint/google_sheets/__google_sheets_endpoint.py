@@ -4,9 +4,8 @@ import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
-
 # Файл, полученный в Google Developer Console
-CREDENTIALS_FILE = 'secrets/sheets-creds.json'
+CREDENTIALS_FILE = '.secrets/sheets-creds.json'
 # ID Google Sheets документа (можно взять из его URL)
 spreadsheet_id = '1KQXMKwM0ECkPAonvfEw9m_geA6ZcRBwBhdAozZ0H5qI'
 
@@ -16,7 +15,7 @@ credentials = ServiceAccountCredentials.from_json_keyfile_name(
     ['https://www.googleapis.com/auth/spreadsheets',
      'https://www.googleapis.com/auth/drive'])
 httpAuth = credentials.authorize(httplib2.Http())
-service = apiclient.discovery.build('sheets', 'v4', http = httpAuth)
+service = apiclient.discovery.build('sheets', 'v4', http=httpAuth)
 
 # Пример чтения файла
 values = service.spreadsheets().values().get(
@@ -38,11 +37,11 @@ values = service.spreadsheets().values().batchUpdate(
             {"range": "D5:E6",
              "majorDimension": "COLUMNS",
              "values": [["This is D5", "This is D6"], ["This is E5", "=5+5"]]},
-             {
-                 'range': 'Z1:AA1',
-                 'majorDimension': "COLUMNS",
-                 'values': [['hello'], ['world']],
-             }
-	]
+            {
+                'range': 'Z1:AA1',
+                'majorDimension': "COLUMNS",
+                'values': [['hello'], ['world']],
+            }
+        ]
     }
 ).execute()
