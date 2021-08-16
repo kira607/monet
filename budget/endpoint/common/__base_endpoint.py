@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
-from budget.transaction import Transaction
+from budget.models.transaction import Transaction
 
 
-class Storage(ABC):
+class BaseEndpoint(ABC):
     def __init__(self):
         pass
 

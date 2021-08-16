@@ -1,13 +1,13 @@
 from typing import List
 
-from pandas import Series, DataFrame
+from pandas import DataFrame
 
-from budget.transaction import Transaction
-from budget.storage.common.storage import Storage
+from budget.models.transaction import Transaction
+from budget.endpoint.common.__base_endpoint import BaseEndpoint
 import pandas as pd
 
 
-class CsvStorage(Storage):
+class CsvEndpoint(BaseEndpoint):
     df = None
 
     def __init__(self, file_path: str):

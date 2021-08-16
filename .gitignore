@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 
 .idea/
-budget/storage/google_sheets/secrets/
+budget/endpoint/google_sheets/.secrets/
