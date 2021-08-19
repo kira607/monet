@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import List
-from budget.models.transaction import Transaction
+from budget.models import Transaction
 
 
 class BaseEndpoint(ABC):

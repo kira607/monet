@@ -1,57 +1,18 @@
-from datetime import datetime
-
-from budget.models.account import Account
-from budget.common.utils import gen_id
-
-
-transaction_conf = {
-    'transaction_id': str,
-    'asset_from_id': str,
-    'asset_to_id': str,
-    'value': float,
-    'plan_value': float,
-    'pay_date': datetime,
-    'start_date': datetime,
-    'due_date': datetime,
-}
+from budget.common.datetime import DateTime
+from budget.models.field import Field
+from budget.models.model import Model
 
 
-class Transaction:
-    transaction_id = gen_id('T-')
-    asset_from_id: Account = None
-    asset_to_id: Account = None  # category
-    value: float = 0.0
-    pay_date: datetime = None
-    start_date = None
-    due_date = None
-
-    def __init__(self, from_, to, value, date):
-        self.asset_from_id = from_
-        self.asset_to_id = to
-        self.value = value
-        self.pay_date = date
-        setattr(self, 'plan_value', 4)
-
-    @property
-    def dict(self):
-        return {
-            'transaction_id': self.transaction_id,
-            'asset_from_id': self.asset_from_id,
-            'asset_to_id': self.asset_to_id,
-            'value': self.value,
-            'pay_date': self.pay_date,
-            'start_date': self.start_date,
-            'due_date': self.due_date,
-        }
-
-    @property
-    def list(self):
-        return (
-            self.transaction_id,
-            self.asset_from_id,
-            self.asset_to_id,
-            self.value,
-            self.pay_date,
-            self.start_date,
-            self.due_date,
-        )
+class Transaction(Model):
+    id = Field(str)
+    name = Field(str)
+    from_ = Field(str)
+    to = Field(str)
+    value = Field(float)
+    pay_date = Field(DateTime)
+    start_date = Field(DateTime)
+    due_date = Field(DateTime)
+    planned_value = Field(float)
+    planned = Field(bool) 
+    comment = Field(str)
+    tag = Field(str)

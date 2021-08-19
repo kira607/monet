@@ -2,7 +2,7 @@ from typing import List
 
 from pandas import DataFrame
 
-from budget.models.transaction import Transaction
+from budget.models import Transaction
 from budget.endpoint.common.__base_endpoint import BaseEndpoint
 import pandas as pd
 
