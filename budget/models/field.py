@@ -14,6 +14,10 @@ class Field:
         self.__value_check(value)
         self._value = value
 
+    @property
+    def value(self):
+        return self._value
+
     def __value_check(self, value):
         # type check
         if not isinstance(value, self._type) and value is not None:
