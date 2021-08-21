@@ -8,13 +8,17 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def add(self, transaction: Transaction):
+    def add(self, _item):
         pass
 
     @abstractmethod
-    def delete(self, *, transaction_id: str = None, filters: List[filter] = None):
+    def delete(self, _id: str = None):
         pass
 
     @abstractmethod
     def get(self, *, filters: List[filter]):
+        pass
+
+    @abstractmethod
+    def update(self):
         pass
