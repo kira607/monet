@@ -41,5 +41,5 @@ class ModelConverter:
         if table is None:
             raise RuntimeError(f'Unexpected model type: {type(model).__name__}')
         data = ConverterData(model, table, request_type)
-        converter = SqliteConverter(data)
+        converter = self.endpoint_mapping[endpoint](data)
         return converter.get_data()
