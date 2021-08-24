@@ -1,13 +1,13 @@
 from budget.common.datetime import DateTime
-from budget.models.field import Field
+from budget.models.model.field import Field
 from budget.models.model import Model
 
 
 class Transaction(Model):
-    id = Field(str)
+    id = Field(str, primary=True, unique=True, nullable=False)
     name = Field(str)
-    from_ = Field(str)
-    to = Field(str)
+    from_id = Field(str)
+    to_id = Field(str)
     value = Field(float)
     pay_date = Field(DateTime)
     start_date = Field(DateTime)

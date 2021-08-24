@@ -1,6 +1,6 @@
 from typing import List, Tuple, Any
 
-from budget.models.field import Field
+from budget.models.model.field import Field
 
 
 class Model:
@@ -35,6 +35,19 @@ class Model:
                     isinstance(attribute_value, Field)
             ):
                 a.append((attribute_name, attribute_value.value))
+        return a
+
+    @property
+    def attributes_full(self):
+        a = []
+        for attribute_name in self.__class__.__dict__.keys():
+            attribute_value = self.__custom_getattr(attribute_name, True)
+            if (
+                    attribute_name[:2] != '__' and
+                    not callable(attribute_value) and
+                    isinstance(attribute_value, Field)
+            ):
+                a.append(attribute_value)
         return a
 
     def __custom_setattr(self, key, value):
