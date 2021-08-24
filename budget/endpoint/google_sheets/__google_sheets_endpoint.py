@@ -4,6 +4,13 @@ import httplib2
 import apiclient.discovery
 from oauth2client.service_account import ServiceAccountCredentials
 
+from budget.endpoint import BaseEndpoint
+
+
+class GoogleSheetsEndpoint(BaseEndpoint):
+    pass
+
+
 # Файл, полученный в Google Developer Console
 CREDENTIALS_FILE = '.secrets/sheets-creds.json'
 # ID Google Sheets документа (можно взять из его URL)

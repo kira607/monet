@@ -11,11 +11,6 @@ class Budget:
     def __init__(self, endpoint: BaseEndpoint):
         self.endpoint = endpoint
 
-    def add_transaction(self, from_, to, value):
-        transaction = Transaction(from_, to, value, self.__now())
-        self.endpoint.add(transaction)
-        return transaction
-
     @staticmethod
     def __now():
         return datetime.datetime.now().strftime('%d-%m-%Y')
