@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Type, Any, Iterable
 
-from budget.models import BaseModel
+from budget.models import Model
 
 
 class BaseEndpoint(ABC):
@@ -9,7 +9,7 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def insert(self, model: Type[BaseModel], data: Any) -> BaseModel:
+    def insert(self, model: Type[Model], data: Any) -> Model:
         '''
         Insert new model into storage
 
@@ -20,7 +20,7 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def delete(self, model: Type[BaseModel], data: Any) -> None:
+    def delete(self, model: Type[Model], data: Any) -> None:
         '''
         Delete model from storage
 
@@ -31,7 +31,7 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def get(self, model: Type[BaseModel]) -> Iterable[BaseModel]:
+    def get(self, model: Type[Model]) -> Iterable[Model]:
         '''
         Get all models list from the storage
 
@@ -41,7 +41,7 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def update(self, model: Type[BaseModel], data: BaseModel) -> BaseModel:
+    def update(self, model: Type[Model], data: Model) -> Model:
         '''
         Update model in the storage
 
