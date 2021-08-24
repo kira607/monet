@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple, Any
 
 from budget.models.field import Field
 
@@ -10,31 +10,38 @@ class Model:
                 self.__custom_setattr(name, value)
             else:
                 raise Exception(f'Not a valid keyword argument: {name}')
+        self.get_field_switch = False
 
     def __setattr__(self, key, value):
-        self.__custom_setattr(key, value)
+        if key in self.__class__.__dict__.keys():
+            self.__custom_setattr(key, value)
+        else:
+            super(Model, self).__setattr__(key, value)
 
     def __getattribute__(self, item):
         obj = super(Model, self).__getattribute__(item)
-        if isinstance(obj, Field):
+        if isinstance(obj, Field) and not self.__get_field_switch:
             return obj.value
         return obj
 
-    def __getattr__(self, item):
-        pass
-
     @property
-    def attributes(self) -> List:
+    def attributes(self) -> List[Tuple[str, Any]]:
         a = []
-        for attribute in self.__class__.__dict__.keys():
-            value = getattr(self, attribute)
+        for attribute_name in self.__class__.__dict__.keys():
+            attribute_value = self.__custom_getattr(attribute_name, True)
             if (
-                    attribute[:2] != '__' and
-                    not callable(value) and
-                    isinstance(value, Field)
+                    attribute_name[:2] != '__' and
+                    not callable(attribute_value) and
+                    isinstance(attribute_value, Field)
             ):
-                a.append((attribute, self.__custom_getattr(attribute)))
+                a.append((attribute_name, attribute_value.value))
         return a
 
     def __custom_setattr(self, key, value):
         self.__class__.__dict__[key].set_value(value)
+
+    def __custom_getattr(self, attribute_name, get_field_obj: bool = False):
+        self.__get_field_switch = get_field_obj
+        value = getattr(self, attribute_name)
+        self.__get_field_switch = False
+        return value
