@@ -7,7 +7,7 @@ from pandas import DataFrame
 
 from budget.common.utils import gen_id
 from budget.endpoint.common.__base_endpoint import BaseEndpoint
-from budget.models.transaction import Transaction
+from budget.models.operation import Operation
 
 
 class Query:
@@ -37,7 +37,7 @@ class TestCsvEndpoint(BaseEndpoint):
         self.__load()
         super().__init__()
 
-    def add(self, transaction: Transaction):
+    def add(self, transaction: Operation):
         while self.__is_duplicated(transaction):
             print(f'duplicate id {transaction.transaction_id}')
             transaction.transaction_id = gen_id('T-')
@@ -62,7 +62,7 @@ class TestCsvEndpoint(BaseEndpoint):
         self.df.to_csv(self.file_path)
 
     @staticmethod
-    def __transaction_to_data_frame(transaction: Transaction) -> DataFrame:
+    def __transaction_to_data_frame(transaction: Operation) -> DataFrame:
         data = transaction.dict
         index = data['transaction_id']
         del data['transaction_id']
@@ -80,7 +80,7 @@ class TestCsvEndpoint(BaseEndpoint):
 
 path_to_storage = os.path.join(os.getcwd(), '.data/test.csv')
 storage = TestCsvEndpoint(path_to_storage)
-t = Transaction('1', '2', 3, datetime.now().strftime('%d-%m-%Y'))
+t = Operation('1', '2', 3, datetime.now().strftime('%d-%m-%Y'))
 storage.add(t)
 print(t.plan_value)
 # storage.delete(transaction_id='T-1IxIed')

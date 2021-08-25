@@ -1,6 +1,6 @@
-from budget.endpoint.common.__base_endpoint import BaseEndpoint
-from budget.models.transaction import Transaction
 import datetime
+
+from budget.endpoint import BaseEndpoint
 
 
 class Budget:
