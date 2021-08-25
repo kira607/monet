@@ -52,8 +52,11 @@ class Field:
         return self._type
 
     def __value_check(self, value):
-        if not isinstance(value, self._type) and value is not None:
-            raise TypeError(f'value type must be {self._type.__name__}')
+        if not isinstance(value, self._type):
+            if not self.nullable and value is None:  # value is None when field is not nullable
+                raise TypeError(f'value cannot be None and must be {self._type.__name__}')
+            elif value is not None:
+                raise TypeError(f'value type must be {self._type.__name__}')
 
     def __repr__(self):
         return f'<class Field({self._type.__name__}, {self._value})>'
