@@ -38,7 +38,12 @@ class Model:
         return a
 
     @property
-    def attributes_full(self):
+    def fields(self) -> List[Tuple[str, Field]]:
+        '''
+        Get fields of a model.
+
+        :return: List of model fields in a (name, model object) tuple
+        '''
         a = []
         for attribute_name in self.__class__.__dict__.keys():
             attribute_value = self.__custom_getattr(attribute_name, True)
@@ -47,7 +52,7 @@ class Model:
                     not callable(attribute_value) and
                     isinstance(attribute_value, Field)
             ):
-                a.append(attribute_value)
+                a.append((attribute_name, attribute_value))
         return a
 
     def __custom_setattr(self, key, value):

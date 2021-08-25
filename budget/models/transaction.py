@@ -5,11 +5,11 @@ from budget.models.model import Model
 
 class Transaction(Model):
     id = Field(str, primary=True, unique=True, nullable=False)
-    name = Field(str)
-    from_id = Field(str)
-    to_id = Field(str)
-    value = Field(float)
-    pay_date = Field(DateTime)
+    name = Field(str, nullable=False)
+    from_id = Field(str, nullable=False)
+    to_id = Field(str, nullable=False)
+    value = Field(float, nullable=False)
+    pay_date = Field(DateTime, nullable=False)
     start_date = Field(DateTime)
     due_date = Field(DateTime)
     planned_value = Field(float)
