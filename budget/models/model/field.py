@@ -1,8 +1,10 @@
-from typing import Any, Type
+from typing import Any, Type, Union
+
+from budget.common import Date
 
 
 class Field:
-    _type: type
+    _type: Type
     _value: Any
     default: Any = None
     nullable: bool = True
@@ -11,9 +13,12 @@ class Field:
     check: str = None
     foreign_key: Any = None
 
+    known_types = (str, int, float, bytes, Date, bool)
+    FieldType = Type[Union[str, int, float, bytes, Date, bool]]
+
     def __init__(
             self,
-            field_type: Type,
+            field_type: FieldType,
             default: Any = None,
             nullable: bool = True,
             primary: bool = False,
@@ -30,6 +35,8 @@ class Field:
         :param check: string expression describing checks for field
         :param foreign_key: string describing foreign key in a `table.column` format
         '''
+        if field_type not in self.known_types:
+            raise Exception(f'Field type must be either [{self.known_types}]. Got {field_type}')
         self._type = field_type
         self.__value_check(default)
         self._value = default

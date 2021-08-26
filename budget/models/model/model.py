@@ -25,6 +25,10 @@ class Model:
         return obj
 
     @property
+    def cols_num(self) -> int:
+        return len(self.__attrs())
+
+    @property
     def values(self) -> List[Tuple[str, Any]]:
         '''
         Get attributes names and their values of the model
