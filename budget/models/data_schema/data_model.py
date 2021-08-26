@@ -14,6 +14,10 @@ class DataModel:
         self.model = model
         self.id_prefix = prefix
 
+    @property
+    def columns_num(self) -> int:
+        return self.model().cols_num
+
     def iter(
             self,
             add_value=False,

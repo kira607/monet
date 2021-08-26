@@ -31,7 +31,6 @@ class BaseEndpoint(ABC):
         '''
         Update model in the storage
 
-        :param model_id: id of the model (to identify model in the storage)
         :param data_model: type of model (to identify table)
         :param data: Updated model instance
         :return: Updated model

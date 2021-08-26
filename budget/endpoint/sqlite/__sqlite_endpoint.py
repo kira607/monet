@@ -1,6 +1,7 @@
 import sqlite3
 from typing import Type, Iterable, Any, Tuple, List
 
+from budget.common import Date
 from budget.endpoint import BaseEndpoint
 from budget.models import data_schema, Model, DataModel
 
@@ -10,12 +11,16 @@ class SqliteEndpoint(BaseEndpoint):
     Endpoint for SQLite database
     '''
 
-    type_mapping = {
+    type_definition_mapping = {
         str: 'TEXT',
         None: 'NULL',
         int: 'INTEGER',
         float: 'REAL',
         bytes: 'BLOB',
+    }
+
+    cast_mapping = {
+        Date: str,
     }
 
     def __init__(self, storage_path: str):
@@ -24,11 +29,11 @@ class SqliteEndpoint(BaseEndpoint):
         self.__create_tables()
         super().__init__()
 
-    def insert(self, data_model: DataModel, values: List) -> List:
-        statement = f'INSERT INTO {data_model.name} VALUES {values}'
+    def insert(self, data_model: DataModel, data: Model) -> List:
+        values = self.__get_values(data)
+        sql = f'INSERT INTO {data_model.name} VALUES ({",".join(("?" for _ in range(data_model.columns_num)))})'
         with self.__connection as conn:
-            print(f'executing: {statement}')
-            data = conn.execute(f'INSERT INTO ? VALUES ?', (data_model.name, values))
+            data = conn.execute(sql, values)
         return data.fetchall()
 
     def get(self, data_model: DataModel) -> Iterable[Model]:
@@ -36,14 +41,13 @@ class SqliteEndpoint(BaseEndpoint):
             data = conn.execute(f'SELECT * FROM {data_model.name};')
         return data.fetchall()
 
-    def update(self, data_model: DataModel, values: List) -> List:
-        model_id = values[0]
-        fields_set = []
-        for name, value in zip(data_model.iter(), values):
-            fields_set.append(f'{name} = {value}')
-        fields_set = (', '.join(fields_set))
+    def update(self, data_model: DataModel, data: Model) -> List:
+        fields_set = ', '.join([f'{name[0]}={value}' for name, value in zip(data_model.iter(), self.__get_values(data))])
+        placeholders = (data.id,)
+        sql = f'UPDATE {data_model.name} SET {fields_set} WHERE id=?;'
+        print(f'executing: {sql}\nwith parameters: {placeholders}')
         with self.__connection as conn:
-            data = conn.execute(f'UPDATE {data_model.name} SET {fields_set} WHERE id={model_id};')
+            data = conn.execute(sql, placeholders)
         return data.fetchall()
 
     def delete(self, data_model: DataModel, model_id: str) -> None:
@@ -57,7 +61,7 @@ class SqliteEndpoint(BaseEndpoint):
             columns_definition = []
             for name, column in data_model.iter(add_field=True):
                 column_definition = f'{name} '
-                column_definition += f'{self.type_mapping.get(column.type, "TEXT")} '
+                column_definition += f'{self.type_definition_mapping.get(column.type, "TEXT")} '
                 column_definition += 'NOT NULL ' if not column.nullable else ''
                 column_definition += 'PRIMARY KEY ' if column.primary else ''
                 column_definition += 'UNIQUE ' if column.unique else ''
@@ -70,3 +74,20 @@ class SqliteEndpoint(BaseEndpoint):
         with self.__connection as connection:
             for table_query in tables_queries:
                 connection.execute(table_query)
+
+    def __get_values(self, model: Model) -> List[Any]:
+        '''
+        Get values of the model, each type casted to type acceptable for sqlite.
+
+        acceptable types are decentralized so return type hint is Any for now
+
+        :param Model model: model which values should be casted
+        :return: list of values, casted to type acceptable for sqlite
+        '''
+        values = []
+        for name, value in model.values:
+            cast = self.cast_mapping.get(type(value), None)
+            if cast is not None:
+                value = cast(value)
+            values.append(value)
+        return values

@@ -40,7 +40,7 @@ class DataSchema(Iterator):
                 return model
         return None
 
-    operation = DataModel('Operation', Operation, 'TRN')
+    operation = DataModel('Operation', Operation, 'OPN')
     account = DataModel('Account', Account, 'ACT')
     currency = DataModel('Currency', Currency, 'CUR')
     tag = DataModel('Tag', Tag, 'TAG')
