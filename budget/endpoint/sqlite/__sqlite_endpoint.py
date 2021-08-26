@@ -36,23 +36,32 @@ class SqliteEndpoint(BaseEndpoint):
             data = conn.execute(sql, values)
         return data.fetchall()
 
-    def get(self, data_model: DataModel) -> Iterable[Model]:
+    def get(self, data_model: DataModel, **kwargs) -> Iterable[Model]:
+        where = []
+        for k, v in kwargs.items():
+            if k in (n[0] for n in data_model.iter()):
+                v = self.__cast_value(v, True)
+                where.append(f'{k}={v}')
+        sql = f'SELECT * FROM {data_model.name}'
+        if len(where) > 0:
+            where = ', '.join(where)
+            sql += f' WHERE {where}'
+        sql += ';'
         with self.__connection as conn:
-            data = conn.execute(f'SELECT * FROM {data_model.name};')
+            data = conn.execute(sql)
         return data.fetchall()
 
-    def update(self, data_model: DataModel, data: Model) -> List:
-        fields_set = ', '.join([f'{name[0]}={value}' for name, value in zip(data_model.iter(), self.__get_values(data))])
+    def update(self, data_model: DataModel, data: Model):
+        update_string = self.__get_update_string(data_model, data)
         placeholders = (data.id,)
-        sql = f'UPDATE {data_model.name} SET {fields_set} WHERE id=?;'
-        print(f'executing: {sql}\nwith parameters: {placeholders}')
+        sql = f'UPDATE {data_model.name} SET {update_string} WHERE id=?;'
         with self.__connection as conn:
-            data = conn.execute(sql, placeholders)
-        return data.fetchall()
+            conn.execute(sql, placeholders)
+        return self.get(data_model, id=data.id)
 
-    def delete(self, data_model: DataModel, model_id: str) -> None:
+    def delete(self, data_model: DataModel, data: Model) -> None:
         with self.__connection as conn:
-            conn.execute(f'DELETE FROM {data_model.name} WHERE id={model_id};')
+            conn.execute(f'DELETE FROM {data_model.name} WHERE id=?;', (data.id,))
 
     def __create_tables(self):
         tables_queries = []
@@ -85,9 +94,26 @@ class SqliteEndpoint(BaseEndpoint):
         :return: list of values, casted to type acceptable for sqlite
         '''
         values = []
-        for name, value in model.values:
-            cast = self.cast_mapping.get(type(value), None)
-            if cast is not None:
-                value = cast(value)
+        for _, value in model.values:
+            value = self.__cast_value(value)
             values.append(value)
         return values
+
+    def __cast_value(self, value: Any, query_string: bool = False):
+        cast = self.cast_mapping.get(type(value), None)
+        if cast is not None:
+            value = cast(value)
+        if query_string:
+            if isinstance(value, str):
+                value = f'"{value}"'
+            if value is None:
+                value = "NULL"
+        return value
+
+    def __get_update_string(self, data_model: DataModel, model: Model) -> str:
+        fields_set = []
+        for name, value in zip(data_model.iter(), self.__get_values(model)):
+            name = name[0]
+            value = self.__cast_value(value, True)
+            fields_set.append(f'{name}={value}')
+        return ', '.join(fields_set)
