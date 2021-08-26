@@ -1,6 +1,6 @@
 import os
 
 from interfaces.kivy import KivyInterface as Interface
-from budget.endpoint.sqlite import SqliteEndpoint as Storage
+from budget.endpoint import SqliteEndpoint as Storage
 
-storage_path = os.path.join(os.getcwd(), '.data/sqlite')
+storage_path = os.path.join(os.getcwd(), '.data/sqlite/budget.db')

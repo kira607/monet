@@ -2,7 +2,7 @@ from typing import List
 
 from pandas import DataFrame
 
-from budget.models import Transaction
+from budget.models import Operation
 from budget.endpoint.common.__base_endpoint import BaseEndpoint
 import pandas as pd
 
@@ -16,7 +16,7 @@ class CsvEndpoint(BaseEndpoint):
         print(self.df.head())
         super().__init__()
 
-    def add(self, transaction: Transaction):
+    def add(self, transaction: Operation):
         transaction_data_frame = DataFrame(data=transaction.dict, index=[transaction.transaction_id])
         self.df = self.df.append(transaction_data_frame)
         self.__save()

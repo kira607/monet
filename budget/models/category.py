@@ -1,9 +1,9 @@
-from budget.models.field import Field
+from budget.models.model.field import Field
 from budget.models.model import Model
 
 
 class Category(Model):
-    id = Field(str)
-    name = Field(str)
-    color = Field(str)
-    icon = Field(str)
+    id = Field(str, primary=True, unique=True, nullable=False)
+    name = Field(str, nullable=False)
+    color = Field(str, nullable=False)
+    icon = Field(str, nullable=False)

@@ -26,7 +26,7 @@ class Option:
 
 class AddTransaction(Option):
     def _process(self):
-        print('add transaction')
+        print('add operation')
         t = self.__input_transaction()
         self.budget.add_transaction(*t)
 
@@ -59,7 +59,7 @@ class Options:
 
     def __init__(self, option):
         self.options = {
-            't': AddTransaction('t', 'add transaction'),
+            't': AddTransaction('t', 'add operation'),
             'a': ShowAssets('a', 'show assets'),
             's': ShowTransactions('s', 'show transactions'),
             'e': ExitApp('exit', 'exit'),
