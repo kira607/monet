@@ -18,6 +18,11 @@ class DataModel:
     def columns_num(self) -> int:
         return self.model().cols_num
 
+    def get_field(self, name):
+        for n, f in self.model().fields:
+            if name == n:
+                return f
+
     def iter(
             self,
             add_value=False,

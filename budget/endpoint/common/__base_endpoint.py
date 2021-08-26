@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterable
+from typing import Any, Iterable, List
 
 from budget.models import Model, DataModel
 
@@ -17,7 +17,7 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def get(self, data_model: DataModel) -> Iterable[Model]:
+    def get(self, data_model: DataModel, **kwargs) -> List[Model]:
         '''
         Get all models list from the storage
 
