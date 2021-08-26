@@ -8,19 +8,4 @@ class SqliteConverter(BaseConverter):
         super().__init__(data)
 
     def get_data(self):
-        table = self._data.schema_name
-        model = self._data.model
-        rt_map = {
-            RequestType.GET: None,
-            RequestType.INSERT: self.cast([v for _, v in model.values]),
-            RequestType.UPDATE: self.cast([v for _, v in model.values]),
-            RequestType.DELETE: model.id,
-        }
-        return rt_map[self._data.request_type]
-
-    def cast(self, l):
-        for n, v in enumerate(l):
-            acceptable = [str, None, int, float, bytes]
-            if type(v) not in acceptable:
-                l[n] = str(v)
-        return tuple(l)
+        return self._data.model
