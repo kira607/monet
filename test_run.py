@@ -29,21 +29,25 @@ def main():
         name='some transaction',
         from_id='',
         to_id='',
-        value=1.0,
-        pay_date=Date(2021, 8, 25),
+        value=14000.0,
+        pay_date=Date(2021, 9, 23),
         start_date=None,
         due_date=None,
         planned_value=None,
         planned=None,
         comment=None,
-        tag=None,
+        tag='TAG-ihki44',
     )
     # data = converter.convert(operation, SqliteEndpoint, RequestType.INSERT)
     d = endpoint.get(data_schema.operation)
-    print(d)
-    endpoint.update(data_schema.operation, operation)
+    print('All data schema:', d)
+    d = endpoint.update(data_schema.operation, operation)
+    print('Updated data schema:', d)
     d = endpoint.get(data_schema.operation)
-    print(d)
+    print('All data schema:', d)
+    endpoint.delete(data_schema.operation, operation)
+    d = endpoint.get(data_schema.operation)
+    print('After delete:', d)
 
 
 if __name__ == '__main__':
