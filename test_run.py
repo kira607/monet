@@ -24,7 +24,9 @@ def main():
     # clear_db()
     endpoint = SqliteEndpoint(storage_path)
     budget = Budget(endpoint)
-    budget.add(data_schema.operation, name='carrots', from_id='', to_id='', value=32.0)
+    print(budget.get(data_schema.operation))
+
+    # budget.add(data_schema.operation, name='carrots', from_id='', to_id='', value=32.0)
 
 
 if __name__ == '__main__':

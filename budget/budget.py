@@ -1,8 +1,9 @@
 import datetime
+from typing import List
 
 from budget.common import gen_id
 from budget.endpoint import BaseEndpoint
-from budget.models import DataModel
+from budget.models import DataModel, Model
 from budget.models.converter import ModelConverter, RequestType
 
 
@@ -17,14 +18,15 @@ class Budget:
 
     def add(self, data_model: DataModel, **kwargs):
         new_model = self.__create_model(data_model, **kwargs)
-        print(new_model.values)
         data = self.converter.convert(new_model, type(self.endpoint), RequestType.INSERT)
-        print(data)
         inserted = self.endpoint.insert(data_model, data)
-        print(inserted)
 
-    def get(self, model: DataModel, **kwargs):
-        pass
+    def get(self, data_model: DataModel, **kwargs) -> List[Model]:
+        data = self.endpoint.get(data_model, **kwargs)
+        for index, data_item in enumerate(data):
+            data[index] = self.converter.from_tuple(data_model, data_item)
+        return data
+
 
     def update(self, model: DataModel, model_id, **kwargs):
         pass

@@ -1,10 +1,10 @@
-from typing import Type, Any, Dict
+from typing import Type, Any, Dict, Tuple
 
 from budget.endpoint import (
     BaseEndpoint,
     SqliteEndpoint,
 )
-from budget.models import Model, data_schema
+from budget.models import Model, data_schema, DataModel
 from .converter_data import ConverterData, RequestType
 from .converters import SqliteConverter, BaseConverter
 
@@ -19,7 +19,7 @@ class ModelConverter:
             self,
             model: Model,
             endpoint: Type[BaseEndpoint],
-            request_type: RequestType = RequestType.GET
+            request_type: RequestType = RequestType.GET,
     ) -> Any:
         '''
         Convert model object into a endpoint specific data type
@@ -35,3 +35,11 @@ class ModelConverter:
         data = ConverterData(model, data_model.name, request_type)
         converter = self.endpoint_mapping[endpoint](data)
         return converter.get_data()
+
+    @staticmethod
+    def from_tuple(data_model: DataModel, data: Tuple) -> Model:
+        model = data_model.model()
+        for kw, new_value in zip(model.values, data):
+            name, _ = kw
+            setattr(model, name, new_value)
+        return model
