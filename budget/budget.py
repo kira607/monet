@@ -14,24 +14,24 @@ class Budget:
     '''
     def __init__(self, endpoint: BaseEndpoint):
         self.endpoint = endpoint
-        self.converter = ModelConverter()
+        self.converter = ModelConverter(type(endpoint))
 
-    def add(self, data_model: DataModel, **kwargs):
+    def add(self, data_model: DataModel, **kwargs) -> Model:
         new_model = self.__create_model(data_model, **kwargs)
-        data = self.converter.convert(new_model, type(self.endpoint), RequestType.INSERT)
+        data = self.converter.get_input(new_model, RequestType.INSERT)
         inserted = self.endpoint.insert(data_model, data)
+        return self.converter.get_output(data_model, inserted)
 
     def get(self, data_model: DataModel, **kwargs) -> List[Model]:
         data = self.endpoint.get(data_model, **kwargs)
         for index, data_item in enumerate(data):
-            data[index] = self.converter.from_tuple(data_model, data_item)
+            data[index] = self.converter.get_output(data_model, data_item)
         return data
 
-
-    def update(self, model: DataModel, model_id, **kwargs):
+    def update(self, data_model: DataModel, model_id, **kwargs) -> Model:
         pass
 
-    def delete(self, model: DataModel, model_id):
+    def delete(self, data_model: DataModel, model_id) -> None:
         pass
 
     def __create_model(self, data_model: DataModel, **kwargs):
@@ -51,8 +51,7 @@ class Budget:
             if value is None and not data_model.get_field(name).nullable and name != 'id':
                 raise Exception(f'Field {name} cannot be null')
 
-        # gen_id
-        # TODO: id generation
+        # TODO: move id generation into the base model
         while True:
             new_id = gen_id(data_model.id_prefix)
             duplicate = self.endpoint.get(data_model, id=new_id)

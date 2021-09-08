@@ -2,10 +2,8 @@ import os
 import sqlite3
 
 from budget import Budget
-from budget.common import Date
 from budget.endpoint import SqliteEndpoint
-from budget.models import Operation, data_schema, Account
-from budget.models.converter import ModelConverter, RequestType
+from budget.models import data_schema, Operation
 
 storage_path = os.path.join(os.getcwd(), '.data/sqlite/budget.db')
 
@@ -24,8 +22,11 @@ def main():
     # clear_db()
     endpoint = SqliteEndpoint(storage_path)
     budget = Budget(endpoint)
-    print(budget.get(data_schema.operation))
-
+    data = budget.get(data_schema.operation)
+    for d in data:
+        print(d.values)
+    o = Operation(name='hello')
+    print(o.values)
     # budget.add(data_schema.operation, name='carrots', from_id='', to_id='', value=32.0)
 
 

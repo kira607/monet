@@ -1,10 +1,10 @@
 from typing import List
 
+import pandas as pd
 from pandas import DataFrame
 
+from budget.endpoint import BaseEndpoint
 from budget.models import Operation
-from budget.endpoint.common.__base_endpoint import BaseEndpoint
-import pandas as pd
 
 
 class CsvEndpoint(BaseEndpoint):
