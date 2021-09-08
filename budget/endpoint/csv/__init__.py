@@ -1,1 +1,1 @@
-from .__csv_endpoint import CsvEndpoint
+from .csv_endpoint import CsvEndpoint

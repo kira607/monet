@@ -1,1 +1,1 @@
-from .__base_endpoint import BaseEndpoint
+from .base_endpoint import BaseEndpoint

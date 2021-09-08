@@ -3,9 +3,9 @@ from typing import Iterator, List, Optional
 from budget.models import Account
 from budget.models import Category
 from budget.models import Currency
+from budget.models import Operation
 from budget.models import SubCategory
 from budget.models import Tag
-from budget.models import Operation
 from budget.models.data_schema import DataModel
 
 

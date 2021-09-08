@@ -1,7 +1,7 @@
 from typing import Type, Generator, Tuple, Optional, Any
 
 from budget.models import Model
-from budget.models.model import Field
+from budget.models.base_model import Field
 
 
 class DataModel:

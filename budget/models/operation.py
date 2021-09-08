@@ -1,10 +1,8 @@
-from budget.common.date import Date
-from budget.models.model.field import Field
-from budget.models.model import Model
+from budget.common import Date
+from budget.models.base_model import Model, Field
 
 
 class Operation(Model):
-    id = Field(str, primary=True, unique=True, nullable=False)
     name = Field(str, nullable=False)
     from_id = Field(str, nullable=False)
     to_id = Field(str, nullable=False)
