@@ -1,1 +1,1 @@
-from .__google_sheets_endpoint import GoogleSheetsEndpoint
+from .google_sheets_endpoint import GoogleSheetsEndpoint

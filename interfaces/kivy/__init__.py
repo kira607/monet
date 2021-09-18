@@ -1,1 +1,1 @@
-from .__interface import KivyInterface
+from .interface import KivyInterface

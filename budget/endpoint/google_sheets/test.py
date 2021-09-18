@@ -1,14 +1,8 @@
 from pprint import pprint
 
-import httplib2
 import apiclient.discovery
+import httplib2
 from oauth2client.service_account import ServiceAccountCredentials
-
-from budget.endpoint import BaseEndpoint
-
-
-class GoogleSheetsEndpoint(BaseEndpoint):
-    pass
 
 
 # Файл, полученный в Google Developer Console

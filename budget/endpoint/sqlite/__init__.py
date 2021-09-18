@@ -1,1 +1,1 @@
-from .__sqlite_endpoint import SqliteEndpoint
+from .sqlite_endpoint import SqliteEndpoint

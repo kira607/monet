@@ -7,3 +7,8 @@ class Date:
 
     def __str__(self):
         return self._dt.strftime('%d.%m.%Y')
+
+    @classmethod
+    def from_str(cls, string: str) -> 'Date':
+        d, m, y = tuple(int(x) for x in tuple(string.split('.')))
+        return cls(y, m, d)

@@ -1,37 +1,31 @@
-from typing import Type, Any, Dict
+from typing import Type, Dict
 
+from budget.common.types import EndpointOutput, EndpointInput
 from budget.endpoint import (
     BaseEndpoint,
     SqliteEndpoint,
 )
-from budget.models import Model, data_schema
-from .converter_data import ConverterData, RequestType
+from budget.models import Model, DataModel
 from .converters import SqliteConverter, BaseConverter
+from .request_type import RequestType
 
 
 class ModelConverter:
-    def __init__(self):
+    def __init__(self, endpoint: Type[BaseEndpoint]):
         self.endpoint_mapping: Dict[Type[BaseEndpoint], Type[BaseConverter]] = {
             SqliteEndpoint: SqliteConverter,
         }
+        self.__cached_converters: Dict[Type[BaseEndpoint], BaseConverter] = {}
+        self.__set_endpoint(endpoint)
 
-    def convert(
-            self,
-            model: Model,
-            endpoint: Type[BaseEndpoint],
-            request_type: RequestType = RequestType.GET
-    ) -> Any:
-        '''
-        Convert model object into a endpoint specific data type
+    def get_input(self, model: Model, request_type: RequestType) -> EndpointInput:
+        return self.__converter.get_input(model, request_type)
 
-        :param model: model object to convert
-        :param endpoint: type of endpoint to which data type conversion will be executed
-        :param request_type: type of request
-        :return: endpoint specific data type
-        '''
-        model_name = type(model).__name__
-        if (data_model := data_schema.get(model_name)) is None:
-            raise RuntimeError(f'Unexpected model type: {model_name}')
-        data = ConverterData(model, data_model.name, request_type)
-        converter = self.endpoint_mapping[endpoint](data)
-        return converter.get_data()
+    def get_output(self, data_model: DataModel, data: EndpointOutput) -> Model:
+        return self.__converter.get_output(data_model, data)
+
+    def __set_endpoint(self, endpoint: Type[BaseEndpoint]):
+        self.__converter = self.__cached_converters.get(endpoint)
+        if self.__converter is None:
+            self.__cached_converters[endpoint] = self.endpoint_mapping[endpoint]()
+        self.__converter = self.__cached_converters[endpoint]
