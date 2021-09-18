@@ -66,5 +66,10 @@ class Field:
             elif value is not None:
                 raise TypeError(f'value type must be {self._type.__name__}')
 
+    def _get_clear_copy(self):
+        self._name = ''
+        self._value = None
+        return self
+
     def __repr__(self):
         return f'<class Field({self._type.__name__}, {self._value})>'

@@ -1,4 +1,4 @@
-from typing import List, Tuple, Any, Union
+from typing import List, Tuple, Any, Union, Type, Dict
 
 from budget.models.base_model import Field
 
@@ -9,22 +9,14 @@ class Model:
     def __new__(cls, *args, **kwargs):
         # TODO: id gen
         instance = super(Model, cls).__new__(cls)
-        common_fields = {
-            'id': Field(str, primary=True, unique=True, nullable=False)
-        }
-        instance._fields = common_fields.copy()
-        for k, v in cls.__dict__.items():
-            if isinstance(v, Field):
-                v._name = k
-                instance._fields[k] = v
+        fields = cls.__load_fields()
+        instance._fields = fields.copy()
         return instance
 
     def __init__(self, **kwargs):
         for name, value in self._fields.items():
             if name == 'id':
                 pass  # gen id
-            elif value.nullable:
-                self._fields[name].set_value(None)
         for name, value in kwargs.items():
             if name in self._fields.keys():
                 self.__custom_setattr(name, value)
@@ -43,8 +35,11 @@ class Model:
         except KeyError as e:
             raise e
 
-    @property
-    def cols_num(self) -> int:
+    @classmethod
+    def cols_num(cls):
+        pass
+
+    def get_cols_num(self) -> int:
         return len(self._fields)
 
     @property
@@ -82,3 +77,15 @@ class Model:
             self._fields[key].set_value(value)
         except TypeError as e:
             raise TypeError(f'field {key}: {e}')
+
+    @classmethod
+    def __load_fields(cls) -> Dict[str, Field]:
+        fields = {
+            'id': Field(str, primary=True, unique=True, nullable=False)
+        }
+        for k, v in cls.__dict__.items():
+            if isinstance(v, Field):
+                v = v._get_clear_copy()
+                v._name = k
+                fields[k] = v
+        return fields

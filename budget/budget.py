@@ -35,7 +35,7 @@ class Budget:
         pass
 
     def __create_model(self, data_model: DataModel, **kwargs):
-        new_model = data_model.model()
+        new_model = data_model.model_type()
         # set values
         for name, value in kwargs.items():
             if name not in (n[0] for n in data_model.iter()):
