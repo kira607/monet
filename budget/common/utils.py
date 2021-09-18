@@ -2,7 +2,7 @@ import random
 import string
 
 
-def gen_id(prefix='', length: int = 6):
+def gen_id(prefix: str = '', length: int = 6) -> str:
     '''
     Generate id
 

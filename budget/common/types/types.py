@@ -11,8 +11,8 @@ SqliteEndpointOutput = Tuple
 GoogleSheetsInput = Any
 GoogleSheetsOutput = Any
 
-CsvEndpointInput = Type[DataFrame]
-CsvEndpointOutput = Type[DataFrame]
+CsvEndpointInput = DataFrame
+CsvEndpointOutput = DataFrame
 
 EndpointInput = Union[
     SqliteEndpointInput,

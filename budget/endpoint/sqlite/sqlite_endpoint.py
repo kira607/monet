@@ -2,6 +2,7 @@ import sqlite3
 from typing import Any, Tuple, List
 
 from budget.common import Date
+from budget.common.types import SqliteEndpointOutput
 from budget.endpoint import BaseEndpoint
 from budget.models import data_schema, Model, DataModel
 
@@ -24,19 +25,32 @@ class SqliteEndpoint(BaseEndpoint):
     }
 
     def __init__(self, storage_path: str):
+        '''
+        :param str storage_path: path to the storage file.db
+        '''
         self.__storage_path = storage_path
         self.__connection = sqlite3.connect(self.__storage_path)
         self.__create_tables()
         super().__init__()
 
-    def insert(self, data_model: DataModel, data: Model) -> List[Tuple]:
+    def insert(self, data_model: DataModel, data: Model) -> SqliteEndpointOutput:
+        '''
+        insert a new model in the database.
+
+        :param data_model: table to use
+        :type data_model: DataModel
+        :param data: New model to insert
+        :type data: Model
+        :return: values of inserted model
+        :rtype: SqliteEndpointOutput
+        '''
         values = self.__get_values(data)
-        sql = f'INSERT INTO {data_model.name} VALUES ({",".join(("?" for _ in range(data_model.columns_num)))})'
+        sql = f'INSERT INTO {data_model.name} VALUES ({",".join(("?" for _ in range(data_model.fields_number)))})'
         with self.__connection as conn:
             conn.execute(sql, values)
-        return self.get(data_model, id=data.id)
+        return self.get(data_model, id=data.id)[0]
 
-    def get(self, data_model: DataModel, **kwargs) -> List[Tuple]:
+    def get(self, data_model: DataModel, **kwargs) -> List[SqliteEndpointOutput]:
         where = []
         for k, v in kwargs.items():
             if k in (n[0] for n in data_model.iter()):
@@ -51,13 +65,13 @@ class SqliteEndpoint(BaseEndpoint):
             data = conn.execute(sql)
         return data.fetchall()
 
-    def update(self, data_model: DataModel, data: Model) -> List[Tuple]:
+    def update(self, data_model: DataModel, data: Model) -> SqliteEndpointOutput:
         update_string = self.__get_update_string(data_model, data)
         placeholders = (data.id,)
         sql = f'UPDATE {data_model.name} SET {update_string} WHERE id=?;'
         with self.__connection as conn:
             conn.execute(sql, placeholders)
-        return self.get(data_model, id=data.id)
+        return self.get(data_model, id=data.id)[0]
 
     def delete(self, data_model: DataModel, data: Model) -> None:
         with self.__connection as conn:
@@ -93,6 +107,7 @@ class SqliteEndpoint(BaseEndpoint):
 
         :param Model model: model which values should be casted
         :return: list of values, casted to type acceptable for sqlite
+        :rtype: List[Any]
         '''
         values = []
         for _, value in model.values:

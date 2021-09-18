@@ -13,7 +13,7 @@ class SqliteConverter(BaseConverter):
         return model
 
     def get_output(self, data_model: DataModel, data: SqliteEndpointOutput) -> Model:
-        model = data_model.model()
+        model = data_model.model_type()
         for kw, new_value in zip(model.fields, data):
             name, field = kw
             new_type = field.type
