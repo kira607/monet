@@ -1,7 +1,7 @@
 from budget import Budget
 from budget.models import data_schema
 from interfaces.base_interface import Interface
-from .app import MyApp
+from .app import MainApp
 
 
 class KivyInterface(Interface):
@@ -11,7 +11,7 @@ class KivyInterface(Interface):
         t = ''
         for hey in hello:
             t += str(hey.values) + '\n'
-        self.app = MyApp(t)
+        self.app = MainApp(t)
 
     def run(self) -> None:
         self.app.run()
