@@ -30,6 +30,5 @@ def main():
     budget.add(data_schema.operation, name='carrots', value=32.0)
 
 
-
 if __name__ == '__main__':
     main()
