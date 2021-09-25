@@ -27,8 +27,20 @@ def main():
         print(d.values)
     o = Operation(name='hello')
     print(o.values)
-    budget.add(data_schema.operation, name='carrots', value=32.0)
+    budget.add(data_schema.operation, from_id='', to_id='', name='carrots', value=32.0) # TODO: does not work
 
+
+def main2():
+    class Value:
+        def __init__(self):
+            self.value = 4
+
+        def __eq__(self, o: object) -> bool:
+            if self.value == o:
+                return None
+            return type(self).__name__
+
+    print(Value() == 4, Value() == 10)
 
 if __name__ == '__main__':
-    main()
+    main2()
