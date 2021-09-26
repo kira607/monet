@@ -1,11 +1,31 @@
-from typing import Tuple, Union, Type, Any
+from typing import Union, Any
 
 from pandas import DataFrame
 
-from budget.models import Model
+from budget.models2 import (
+    Account,
+    Currency,
+    IncomeCategory,
+    IncomeSubcategory,
+    OutcomeCategory,
+    OutcomeSubcategory,
+    Tag,
+    Transaction,
+)
 
-SqliteEndpointInput = Model
-SqliteEndpointOutput = Tuple
+Table = Union[
+    Account,
+    Currency,
+    IncomeCategory,
+    IncomeSubcategory,
+    OutcomeCategory,
+    OutcomeSubcategory,
+    Tag,
+    Transaction,
+]
+
+SqliteEndpointInput = Table
+SqliteEndpointOutput = Table
 
 # TODO: define data types for google sheets
 GoogleSheetsInput = Any
