@@ -1,6 +1,8 @@
 pandas
+sqlalchemy
 kivy
 kivymd
+buildozer
 
 # =================================
 # google sheets requirements

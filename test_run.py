@@ -1,46 +1,54 @@
 import os
-import sqlite3
 
 from budget import Budget
-from budget.endpoint import SqliteEndpoint
-from budget.models import data_schema, Operation, Model
+from budget.endpoint.sqlite.sqlite_endpoint import SqliteEndpoint
+from budget.models import Tables, Account, Currency, IncomeCategory, IncomeSubcategory, OutcomeCategory, \
+    OutcomeSubcategory, Tag, Transaction
 
 storage_path = os.path.join(os.getcwd(), '.data/sqlite/budget.db')
 
 
-def clear_db():
-    conn = sqlite3.connect(storage_path)
-    with conn:
-        tables = conn.execute('SELECT name FROM sqlite_master WHERE type = "table";')
-        tables = [name[0] for name in tables.fetchall()]
-        print(f'tables to delete: {tables}')
-        for table in tables:
-            pass # conn.execute(f'DROP TABLE {table};')
+my_data = {
+    Currency: (
+        Currency(name='USD', symbol='$', relative_value=0),
+        Currency(name='EUR', symbol='€', relative_value=0),
+        Currency(name='RUB', symbol='₽', relative_value=1, main=True),
+    ),
+    Account: (
+        Account(name='Тинькофф', currency='RUB', initial_value=804.63),
+        Account(name='Подушка USD', currency='USD', initial_value=1),
+        Account(name='Подушка EUR', currency='EUR', initial_value=1),
+        Account(name='Подушка RUB', currency='RUB', initial_value=70200.07),
+        Account(name='Копилка', currency='RUB', initial_value=18107.11),
+        Account(name='Райфайзен', currency='RUB', initial_value=654.06),
+        Account(name='Налик', currency='RUB', initial_value=11),
+    ),
+    IncomeCategory: (
+        IncomeCategory(name='ZP'),
+    ),
+    IncomeSubcategory: (
+        IncomeSubcategory(name='Аванс', parent='ZP'),
+    ),
+    OutcomeCategory: (
+        OutcomeCategory(name='Продукты'),
+        OutcomeCategory(name='Развлечения'),
+        OutcomeCategory(name='Подарки'),
+        OutcomeCategory(name='Счета'),
+        OutcomeCategory(name='Дом'),
+        OutcomeCategory(name='Транспорт'),
+        OutcomeCategory(name='Кафе'),
+        OutcomeCategory(name='Одежда'),
+    ),
+    OutcomeSubcategory: (),
+    Tag: (),
+    Transaction: (),
+}
 
 
 def main():
-    clear_db()
     endpoint = SqliteEndpoint(storage_path)
     budget = Budget(endpoint)
-    data = budget.get(data_schema.operation)
-    for d in data:
-        print(d.values)
-    o = Operation(name='hello')
-    print(o.values)
-    budget.add(data_schema.operation, from_id='', to_id='', name='carrots', value=32.0) # TODO: does not work
 
-
-def main2():
-    class Value:
-        def __init__(self):
-            self.value = 4
-
-        def __eq__(self, o: object) -> bool:
-            if self.value == o:
-                return None
-            return type(self).__name__
-
-    print(Value() == 4, Value() == 10)
 
 if __name__ == '__main__':
-    main2()
+    main()
