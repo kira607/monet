@@ -1,14 +1,31 @@
 import kivy
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import Screen
 from kivymd.app import MDApp
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
 from kivymd.uix.button import MDRectangleFlatButton
 
 from budget import Budget
-from budget.models import Operation
+from budget.models import Tables, Transaction
 
 kivy.require('2.0.0')
+
+
+class TransactionListItem(BoxLayout):
+    def __init__(self, transaction: Transaction = None, **kwargs):
+        self.transaction = transaction
+        super(TransactionListItem, self).__init__(**kwargs)
+
+
+class Root(BoxLayout):
+    def __init__(self, budget, **kwargs):
+        self.budget = budget
+        super(Root, self).__init__(**kwargs)
+
+    def show(self):
+        data = self.budget.get(Tables.transactions)
+        for d in data:
+            self.transactions_list.add_widget(TransactionListItem(transaction=d))
+
 
 class MainApp(MDApp):
     def __init__(self, budget_ref: Budget, **kwargs):
@@ -17,10 +34,4 @@ class MainApp(MDApp):
 
     def build(self):
         screen = Screen()
-        screen.add_widget(
-            MDRectangleFlatButton(
-                text="Hello, World",
-                pos_hint={"center_x": 0.5, "center_y": 0.5},
-            )
-        )
-        return screen
+        return Root(self.budget)
