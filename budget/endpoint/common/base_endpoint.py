@@ -7,18 +7,18 @@ from budget.common.types import Table
 
 class BaseEndpoint(ABC):
     @abstractmethod
-    def insert(self, table: Table, data: EndpointInput) -> EndpointOutput:
+    def insert(self, table: Table, instance: EndpointInput) -> EndpointOutput:
         '''
         Insert new model into the storage
 
         :param table: type of model (to identify table)
-        :param data: data to insert (one instance at a call)
+        :param instance: data to insert (one instance at a call)
         :return: inserted model instance
         '''
         pass
 
     @abstractmethod
-    def get(self, table: Table, **kwargs) -> List[EndpointOutput]:
+    def get(self, table: Table, *args, **kwargs) -> List[EndpointOutput]:
         '''
         Get all models list from the storage
 
@@ -28,23 +28,23 @@ class BaseEndpoint(ABC):
         pass
 
     @abstractmethod
-    def update(self, table: Table, data: EndpointInput) -> EndpointOutput:
+    def update(self, table: Table, instance: EndpointInput) -> EndpointOutput:
         '''
         Update model in the storage
 
         :param table: type of model (to identify table)
-        :param data: Updated model instance
+        :param instance: Updated model instance
         :return: Updated model
         '''
         pass
 
     @abstractmethod
-    def delete(self, table: Table, data: EndpointInput) -> EndpointOutput:
+    def delete(self, table: Table, instance: EndpointInput) -> EndpointOutput:
         '''
         Delete model from the storage
 
         :param table: type of model (to identify table)
-        :param data: data to identify model in the storage
+        :param instance: data to identify model in the storage
         :return: None
         '''
         pass

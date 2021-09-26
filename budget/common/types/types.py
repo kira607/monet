@@ -2,27 +2,12 @@ from typing import Union, Any
 
 from pandas import DataFrame
 
-from budget.models2 import (
-    Account,
-    Currency,
-    IncomeCategory,
-    IncomeSubcategory,
-    OutcomeCategory,
-    OutcomeSubcategory,
-    Tag,
-    Transaction,
+from budget.models import (
+    Base,
 )
 
-Table = Union[
-    Account,
-    Currency,
-    IncomeCategory,
-    IncomeSubcategory,
-    OutcomeCategory,
-    OutcomeSubcategory,
-    Tag,
-    Transaction,
-]
+Table = Base
+Model = Base
 
 SqliteEndpointInput = Table
 SqliteEndpointOutput = Table
