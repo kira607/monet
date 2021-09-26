@@ -6,5 +6,6 @@ from .types import (
     CsvEndpointInput,
     CsvEndpointOutput,
     GoogleSheetsInput,
-    GoogleSheetsOutput
+    GoogleSheetsOutput,
+    Table,
 )
