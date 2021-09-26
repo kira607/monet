@@ -4,7 +4,7 @@ import pandas as pd
 from pandas import DataFrame
 
 from budget.endpoint import BaseEndpoint
-from budget.models import Operation
+from budget.models import Transaction
 
 
 class CsvEndpoint(BaseEndpoint):
@@ -16,7 +16,7 @@ class CsvEndpoint(BaseEndpoint):
         print(self.df.head())
         super().__init__()
 
-    def add(self, transaction: Operation):
+    def add(self, transaction: Transaction):
         transaction_data_frame = DataFrame(data=transaction.dict, index=[transaction.transaction_id])
         self.df = self.df.append(transaction_data_frame)
         self.__save()

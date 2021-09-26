@@ -1,11 +1,16 @@
-from typing import Tuple, Union, Type, Any
+from typing import Union, Any
 
 from pandas import DataFrame
 
-from budget.models import Model
+from budget.models import (
+    Base,
+)
 
-SqliteEndpointInput = Model
-SqliteEndpointOutput = Tuple
+Table = Base
+Model = Base
+
+SqliteEndpointInput = Table
+SqliteEndpointOutput = Table
 
 # TODO: define data types for google sheets
 GoogleSheetsInput = Any
