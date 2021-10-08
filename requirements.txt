@@ -3,6 +3,8 @@ sqlalchemy
 kivy
 kivymd
 buildozer
+cpython
+cython
 
 # =================================
 # google sheets requirements

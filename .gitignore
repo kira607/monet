@@ -131,3 +131,6 @@ dmypy.json
 
 .idea/
 budget/endpoint/google_sheets/.secrets/
+.buildozer/
+buildozer/
+bin/

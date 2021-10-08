@@ -24,10 +24,11 @@ my_data = {
         Account(name='Налик', currency='RUB', initial_value=11),
     ),
     IncomeCategory: (
-        IncomeCategory(name='ZP'),
+        IncomeCategory(name='Люксофт'),
     ),
     IncomeSubcategory: (
-        IncomeSubcategory(name='Аванс', parent='ZP'),
+        IncomeSubcategory(name='Аванс', parent='Люксофт'),
+        IncomeSubcategory(name='Зарплата', parent='Люксофт'),
     ),
     OutcomeCategory: (
         OutcomeCategory(name='Продукты'),

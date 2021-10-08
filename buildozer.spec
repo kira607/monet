@@ -7,7 +7,7 @@ title = Budget
 package.name = budget
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.budget.test
+package.domain = org.yaco
 
 # (str) Source code where the main.py live
 source.dir = .
@@ -28,7 +28,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.0.0t
+version = 0.0.0
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -36,7 +36,7 @@ version = 0.0.0t
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,kivy
+requirements = python3,kivy,sqlalchemy,kivymd,pandas
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes

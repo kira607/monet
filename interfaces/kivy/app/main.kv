@@ -1,30 +1,61 @@
 <TransactionListItem>:
-    orientation: 'vertical'
+    radius: 7
+    elevation: 30
+
+    name: name
+    comment: comment
+    planned: planned
+    from_: from_
+    value: value
+    plan_value: plan_value
+    to: to
+    plan_date: plan_date
+    fact_date: fact_date
+    tag: tag
+
     BoxLayout:
-        MDLabel:
-            text: 'Name'
-        MDLabel:
-            text: 'Comment'
-        MDLabel:
-            text: 'planned'
-    BoxLayout:
-        MDLabel:
-            text: 'from'
+        orientation: 'vertical'
+        padding: 10
         BoxLayout:
-            orientation: 'vertical'
             MDLabel:
-                text: 'value'
+                id: name
+                text: 'Name'
             MDLabel:
-                text: 'plan value'
-        MDLabel:
-            text: 'to'
-    BoxLayout:
-        MDLabel:
-            text: 'plan date'
-        MDLabel:
-            text: 'fact date'
-        MDLabel:
-            text: 'tag'
+                id: comment
+                theme_text_color: "Secondary"
+                text: 'Comment'
+            MDLabel:
+                id: planned
+                theme_text_color: "Hint"
+                text: 'planned'
+        BoxLayout:
+            MDLabel:
+                id: from_
+                text: 'from'
+            BoxLayout:
+                orientation: 'vertical'
+                MDLabel:
+                    id: value
+                    text: 'value'
+                    theme_text_color: "Custom"
+                    text_color: 0, 1, 0, 1
+                MDLabel:
+                    id: plan_value
+                    text: 'plan value'
+                    theme_text_color: "Hint"
+            MDLabel:
+                id: to
+                text: 'to'
+        BoxLayout:
+            MDLabel:
+                id: plan_date
+                text: 'plan date'
+            MDLabel:
+                id: fact_date
+                text: 'fact date'
+            MDLabel:
+                id: tag
+                text: 'tag'
 
 <Root>:
     orientation: 'vertical'
@@ -41,3 +72,7 @@
     ScrollView:
         MDList:
             id: transactions_list
+
+            TransactionListItem:
+
+            TransactionListItem:
