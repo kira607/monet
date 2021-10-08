@@ -2,77 +2,90 @@
     radius: 7
     elevation: 30
 
-    name: name
-    comment: comment
-    planned: planned
-    from_: from_
-    value: value
-    plan_value: plan_value
-    to: to
-    plan_date: plan_date
-    fact_date: fact_date
-    tag: tag
+    name: name_id
+    comment: comment_id
+    planned: planned_id
+    from_: from_id
+    value: value_id
+    planned_value: planned_value_id
+    to: to_id
+    plan_date: plan_date_id
+    pay_date: pay_date_id
+    tag: tag_id
 
     BoxLayout:
         orientation: 'vertical'
         padding: 10
         BoxLayout:
             MDLabel:
-                id: name
+                id: name_id
                 text: 'Name'
+                font_style: "H5"
             MDLabel:
-                id: comment
+                id: comment_id
                 theme_text_color: "Secondary"
                 text: 'Comment'
             MDLabel:
-                id: planned
+                id: planned_id
                 theme_text_color: "Hint"
                 text: 'planned'
         BoxLayout:
             MDLabel:
-                id: from_
+                id: from_id
                 text: 'from'
             BoxLayout:
                 orientation: 'vertical'
                 MDLabel:
-                    id: value
+                    id: value_id
                     text: 'value'
                     theme_text_color: "Custom"
                     text_color: 0, 1, 0, 1
                 MDLabel:
-                    id: plan_value
-                    text: 'plan value'
+                    id: planned_value_id
+                    text: 'planned value'
                     theme_text_color: "Hint"
             MDLabel:
-                id: to
+                id: to_id
                 text: 'to'
         BoxLayout:
             MDLabel:
-                id: plan_date
+                id: plan_date_id
                 text: 'plan date'
             MDLabel:
-                id: fact_date
-                text: 'fact date'
+                id: pay_date_id
+                text: 'pay_date'
             MDLabel:
-                id: tag
+                id: tag_id
                 text: 'tag'
 
 <Root>:
     orientation: 'vertical'
 
-    transactions_list: transactions_list
-    button: fetch_button
+    ## IDS ##
+    transactions_list: transactions_list_id
 
-    MDRectangleFlatButton:
-        id: fetch_button
-        text: 'show transactions'
-        on_release:
-            root.show()
+    MDBottomNavigation:
 
-    ScrollView:
-        MDList:
-            id: transactions_list
+        MDBottomNavigationItem:
+            name: "screen 1"
+            text: 'transactions'
+            icon: 'format-list-numbered'
 
-            TransactionListItem:
+            RecycleView:
+                id: transactions_list_id
+                viewclass: 'TransactionListItem'
 
-            TransactionListItem:
+                RecycleBoxLayout:
+                    default_size: None, dp(56)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
+
+        MDBottomNavigationItem:
+            name: "screen 2"
+            text: 'accounts'
+
+        MDBottomNavigationItem:
+            name: "screen 3"
+            text: 'hello'

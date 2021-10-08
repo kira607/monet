@@ -1,5 +1,4 @@
 from budget import Budget
-from budget.models import Tables
 from interfaces.base_interface import Interface
 from .app import MainApp
 
