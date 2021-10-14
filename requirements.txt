@@ -5,6 +5,7 @@ kivymd
 buildozer
 cpython
 cython
+Pillow
 
 # =================================
 # google sheets requirements
