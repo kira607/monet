@@ -1,7 +1,4 @@
 <TransactionListItem>:
-    radius: 7
-    elevation: 30
-
     name: name_id
     comment: comment_id
     planned: planned_id
@@ -58,34 +55,78 @@
                 id: tag_id
                 text: 'tag'
 
+<TransactionsList@RecycleView>:
+    viewclass: 'TransactionListItem'
+
+    RecycleBoxLayout:
+        default_size: None, dp(56)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
+
+<AccountListItem>:
+
+    ## IDS ##
+    name: name_id
+    value: value_id
+
+    MDLabel:
+        id: name_id
+        text: 'name'
+    MDLabel:
+        id: value_id
+        text: 'current_value'
+
+
+<AccountsList@RecycleView>:
+    viewclass: 'AccountListItem'
+
+    RecycleBoxLayout:
+        default_size: None, dp(56)
+        default_size_hint: 1, None
+        size_hint_y: None
+        height: self.minimum_height
+        orientation: 'vertical'
+
 <Root>:
     orientation: 'vertical'
 
     ## IDS ##
     transactions_list: transactions_list_id
+    accounts_list: accounts_list_id
 
     MDBottomNavigation:
 
         MDBottomNavigationItem:
-            name: "screen 1"
-            text: 'transactions'
+            name: "screen: plan"
+            text: 'plan'
+            icon: 'calendar-month-outline'
+
+
+        MDBottomNavigationItem:
+            name: 'screen: history'
+            text: 'history'
             icon: 'format-list-numbered'
 
-            RecycleView:
+            TransactionsList:
                 id: transactions_list_id
-                viewclass: 'TransactionListItem'
-
-                RecycleBoxLayout:
-                    default_size: None, dp(56)
-                    default_size_hint: 1, None
-                    size_hint_y: None
-                    height: self.minimum_height
-                    orientation: 'vertical'
 
         MDBottomNavigationItem:
-            name: "screen 2"
+            name: 'screen: home'
+            text: 'home'
+            icon: 'home'
+
+        MDBottomNavigationItem:
+            name: 'screen: analysis'
+            text: 'analysis'
+            icon: 'chart-line'
+
+        MDBottomNavigationItem:
+            name: 'screen: accounts'
             text: 'accounts'
+            icon: 'view-grid-outline'
 
-        MDBottomNavigationItem:
-            name: "screen 3"
-            text: 'hello'
+            AccountsList:
+                id: accounts_list_id

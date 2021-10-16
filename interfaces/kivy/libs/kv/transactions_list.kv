@@ -1,0 +1,59 @@
+<TransactionListItem>:
+    name: name_id
+    comment: comment_id
+    planned: planned_id
+    from_: from_id
+    value: value_id
+    planned_value: planned_value_id
+    to: to_id
+    plan_date: plan_date_id
+    pay_date: pay_date_id
+    tag: tag_id
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        BoxLayout:
+            MDLabel:
+                id: name_id
+                text: 'Name'
+                font_style: "H5"
+            MDLabel:
+                id: comment_id
+                theme_text_color: "Secondary"
+                text: 'Comment'
+            MDLabel:
+                id: planned_id
+                theme_text_color: "Hint"
+                text: 'planned'
+        BoxLayout:
+            MDLabel:
+                id: from_id
+                text: 'from'
+            BoxLayout:
+                orientation: 'vertical'
+                MDLabel:
+                    id: value_id
+                    text: 'value'
+                    theme_text_color: "Custom"
+                    text_color: 0, 1, 0, 1
+                MDLabel:
+                    id: planned_value_id
+                    text: 'planned value'
+                    theme_text_color: "Hint"
+            MDLabel:
+                id: to_id
+                text: 'to'
+        BoxLayout:
+            MDLabel:
+                id: plan_date_id
+                text: 'plan date'
+            MDLabel:
+                id: pay_date_id
+                text: 'pay_date'
+            MDLabel:
+                id: tag_id
+                text: 'tag'
+
+<TransactionsList>:
+    viewclass: 'TransactionListItem'

@@ -1,0 +1,43 @@
+#:import TransactionsList interfaces.kivy.libs.baseclass.transactions_list.TransactionsList
+#:import AccountsList interfaces.kivy.libs.baseclass.accounts_list.AccountsList
+
+<Root>:
+    orientation: 'vertical'
+
+    ## IDS ##
+    transactions_list: transactions_list_id
+    accounts_list: accounts_list_id
+
+    MDBottomNavigation:
+
+        MDBottomNavigationItem:
+            name: "screen: plan"
+            text: 'plan'
+            icon: 'calendar-month-outline'
+
+
+        MDBottomNavigationItem:
+            name: 'screen: history'
+            text: 'history'
+            icon: 'format-list-numbered'
+
+            TransactionsList:
+                id: transactions_list_id
+
+        MDBottomNavigationItem:
+            name: 'screen: home'
+            text: 'home'
+            icon: 'home'
+
+        MDBottomNavigationItem:
+            name: 'screen: analysis'
+            text: 'analysis'
+            icon: 'chart-line'
+
+        MDBottomNavigationItem:
+            name: 'screen: accounts'
+            text: 'accounts'
+            icon: 'view-grid-outline'
+
+            AccountsList:
+                id: accounts_list_id
