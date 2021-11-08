@@ -1,28 +1,31 @@
 from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from budget.models import Tables
+from interfaces.kivy.libs.baseclass.screens.screen_accounts import ScreenAccounts
+from interfaces.kivy.libs.baseclass.screens.screen_analysis import ScreenAnalysis
+from interfaces.kivy.libs.baseclass.screens.screen_history import ScreenHistory
+from interfaces.kivy.libs.baseclass.screens.screen_home import ScreenHome
+from interfaces.kivy.libs.baseclass.screens.screen_plans import ScreenPlans
 
 
 class Root(MDBoxLayout):
     '''The main layout. Contains all app widgets'''
 
-    transactions_list = ObjectProperty()
-    accounts_list = ObjectProperty()
+    # screens
+    plans_screen: ScreenPlans = ObjectProperty()
+    history_screen: ScreenHistory = ObjectProperty()
+    home_screen: ScreenHome = ObjectProperty()
+    analysis_screen: ScreenAnalysis = ObjectProperty()
+    accounts_screen: ScreenAccounts = ObjectProperty()
 
-    def __init__(self, budget, **kwargs):
-        self.budget = budget
-        print(self.ids)
+    def __init__(self, **kwargs):
         super(Root, self).__init__(**kwargs)
+        self.budget = None
 
-    def update_list(self):
-        transactions_list = self.budget.get(Tables.transactions)
-        self.transactions_list.data = [{'transaction': t} for t in transactions_list]
-
-    def update_accounts(self):
-        accounts_list = self.budget.get(Tables.accounts)
-        print(accounts_list)
-        self.accounts_list.data = [{'account': a} for a in accounts_list]
-
-    def __draw_shadow__(self, origin, end, context=None):
-        pass
+    def set_budget(self, budget):
+        self.budget = budget
+        self.plans_screen.init(self.budget)
+        self.history_screen.init(self.budget)
+        self.home_screen.init(self.budget)
+        self.analysis_screen.init(self.budget)
+        self.accounts_screen.init(self.budget)

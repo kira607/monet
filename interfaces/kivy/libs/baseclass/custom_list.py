@@ -1,12 +1,10 @@
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.recycleview import RecycleView
-from kivy.uix.recycleview.views import RecycleDataViewBehavior
-from kivymd.uix.boxlayout import MDBoxLayout
+from kivy.uix.scrollview import ScrollView
+from kivymd.uix.list import ThreeLineAvatarIconListItem, MDList
 
 
-class CustomItem(RecycleDataViewBehavior, BoxLayout):
+class CustomItem(ThreeLineAvatarIconListItem):
     pass
 
 
-class CustomList(RecycleView):
+class CustomList(MDList):
     pass

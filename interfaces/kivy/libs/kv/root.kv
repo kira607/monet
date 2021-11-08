@@ -1,43 +1,69 @@
 #:import TransactionsList interfaces.kivy.libs.baseclass.transactions_list.TransactionsList
 #:import AccountsList interfaces.kivy.libs.baseclass.accounts_list.AccountsList
 
+#:import ScreenPlans interfaces.kivy.libs.baseclass.screens.screen_plans.ScreenPlans
+#:import ScreenHistory interfaces.kivy.libs.baseclass.screens.screen_history.ScreenHistory
+#:import ScreenHome interfaces.kivy.libs.baseclass.screens.screen_home.ScreenHome
+#:import ScreenAnalysis interfaces.kivy.libs.baseclass.screens.screen_analysis.ScreenAnalysis
+#:import ScreenAccounts interfaces.kivy.libs.baseclass.screens.screen_accounts.ScreenAccounts
+
 <Root>:
     orientation: 'vertical'
 
     ## IDS ##
-    transactions_list: transactions_list_id
-    accounts_list: accounts_list_id
+    bottom_nav: bottom_nav_id
+    plans_screen: plans_screen_id
+    history_screen: history_screen_id
+    home_screen: home_screen_id
+    analysis_screen: analysis_screen_id
+    accounts_screen: accounts_screen_id
+
+    MDToolbar:
+        title: 'Budget'
+        md_bg_color: .2, .2, .2, 1
+        specific_text_color: 1, 1, 1, 1
 
     MDBottomNavigation:
+        id: bottom_nav_id
 
-        MDBottomNavigationItem:
+        ScreenPlans:
+            id: plans_screen_id
             name: "screen: plan"
             text: 'plan'
             icon: 'calendar-month-outline'
 
-
-        MDBottomNavigationItem:
+        ScreenHistory:
+            id: history_screen_id
             name: 'screen: history'
             text: 'history'
             icon: 'format-list-numbered'
 
-            TransactionsList:
-                id: transactions_list_id
+            transactions_list: transactions_list_id
 
-        MDBottomNavigationItem:
+            ScrollView:
+                TransactionsList:
+                    id: transactions_list_id
+
+        ScreenHome:
+            id: home_screen_id
             name: 'screen: home'
             text: 'home'
             icon: 'home'
 
-        MDBottomNavigationItem:
+        ScreenAnalysis:
+            id: analysis_screen_id
             name: 'screen: analysis'
             text: 'analysis'
             icon: 'chart-line'
 
-        MDBottomNavigationItem:
+        ScreenAccounts:
+            id: accounts_screen_id
             name: 'screen: accounts'
             text: 'accounts'
             icon: 'view-grid-outline'
 
-            AccountsList:
-                id: accounts_list_id
+            accounts_list: accounts_list_id
+
+            ScrollView:
+                AccountsList:
+                    id: accounts_list_id
