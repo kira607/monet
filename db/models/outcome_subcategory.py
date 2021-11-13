@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String, ForeignKey
 
-from budget.models.outcome_category import OutcomeCategory
+from db.models.outcome_category import OutcomeCategory
 from ._base import Base
 from ._mixins import WithId, WithIcon
 

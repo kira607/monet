@@ -1,6 +1,6 @@
 from sqlalchemy import Column, String
 
-from budget.common import gen_id
+from common import gen_id
 
 
 class WithId(object):

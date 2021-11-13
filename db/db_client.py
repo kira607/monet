@@ -3,10 +3,9 @@ from typing import List, Union, Optional, Tuple, Iterable
 
 from sqlalchemy import create_engine, Column
 from sqlalchemy.engine import Engine
-from sqlalchemy.orm import sessionmaker, scoped_session
-from sqlalchemy.ext.declarative.api import DeclarativeMeta
+from sqlalchemy.orm import sessionmaker, scoped_session, DeclarativeMeta
 
-from budget.db.models import Base
+from db.models import Base
 
 
 class DbClient:

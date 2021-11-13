@@ -1,15 +1,11 @@
 import os
 
-from budget import Budget
-from budget.endpoint import SqliteEndpoint
-from interfaces import KivyInterface
+from app import MainApp
+from db import DbClient
 
 storage_path = os.path.join(os.getcwd(), '.data/sqlite/budget.db')
-Storage = SqliteEndpoint
-Interface = KivyInterface
+
 
 if __name__ == '__main__':
-    storage = Storage(storage_path)
-    budget = Budget(storage)
-    interface = Interface(budget)
-    interface.run()
+    db_client = DbClient(storage_path)
+    MainApp(db_client).run()
