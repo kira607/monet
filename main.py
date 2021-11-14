@@ -1,11 +1,7 @@
-import os
-
 from app import MainApp
-from db import DbClient
-
-storage_path = os.path.join(os.getcwd(), '.data/sqlite/budget.db')
+from db import get_db
 
 
 if __name__ == '__main__':
-    db_client = DbClient(storage_path)
+    db_client = get_db()
     MainApp(db_client).run()

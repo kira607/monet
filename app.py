@@ -7,11 +7,11 @@ from kivy.lang import Builder
 from kivymd.app import MDApp
 
 from db import DbClient
-from libs.baseclass.root import Root  # noqa
-from libs.baseclass.screens.app_manager import AppManager
-from libs.baseclass.screens.main_screen import MainScreen  # noqa
-from libs.baseclass.screens.transaction_editor_screen import TransactionEditorScreen  # noqa
-from libs.baseclass.transaction_editor import TransactionEditor  # noqa
+from ui.screens.main.bottom_nav import BottomNav  # noqa
+from ui.screens.app_manager import AppManager
+from ui.screens import MainScreen  # noqa
+from ui.screens import TransactionEditorScreen  # noqa
+from ui.screens.transaction_editor.editor.transaction_editor import TransactionEditor  # noqa
 
 kivy.require('2.0.0')
 
@@ -28,7 +28,7 @@ os.environ['APP_ASSETS'] = os.path.join(os.environ['APP_ROOT'], f'assets{os.sep}
 class PathTo:
     @staticmethod
     def kv(file_name: str):
-        path = os.path.join(os.environ['APP_ROOT'], 'libs', 'kv', file_name)
+        path = os.path.join(os.environ['APP_ROOT'], 'ui', 'kv', file_name)
         print(f'loading {path} ...')
         return path
 
@@ -61,6 +61,9 @@ class MainApp(MDApp):
         self.am.transition.direction = 'right'
         self.am.current = 'main'
 
+    def pick_from(self):
+        self.am.transaction_editor.editor.pick_from()
+
     def delete_transaction(self, transaction):
         self.db.delete(transaction.transaction)
         self.am.main.root.history_screen.transactions_list.remove(transaction)
@@ -71,7 +74,7 @@ class MainApp(MDApp):
         return self.am
 
     def _load_kvs(self):
-        Builder.load_file(PathTo.kv('root.kv'))
+        Builder.load_file(PathTo.kv('main_screen.kv'))
         Builder.load_file(PathTo.kv('accounts_list.kv'))
         Builder.load_file(PathTo.kv('transactions_list.kv'))
         Builder.load_file(PathTo.kv('transaction_editor_screen.kv'))

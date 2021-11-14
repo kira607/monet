@@ -151,7 +151,7 @@ class DbClient:
         Base.metadata.create_all(bind=self.__engine)
 
     def __create_engine(self) -> Engine:
-        conn_str = 'sqlite+pysqlite:///%s' % self.__storage_path
+        conn_str = f'sqlite+pysqlite:///{self.__storage_path}'
         engine = create_engine(conn_str, echo=False)
         return engine
 
