@@ -1,6 +1,42 @@
+#:import PlansTab ui.main.plans.PlansTab
+#:import HistoryTab ui.main.history.HistoryTab
+#:import HomeTab ui.main.home.HomeTab
+#:import AnalysisTab ui.main.analysis.AnalysisTab
+#:import AccountsTab ui.main.accounts.AccountsTab
+
 <MainScreen>:
     name: 'main'
-    root: root_id
 
-    Root:
-        id: root_id
+    ## IDS ##
+    bottom_nav: bottom_nav_id
+    plans_screen: plans_screen_id
+    history_screen: history_screen_id
+    home_screen: home_screen_id
+    analysis_screen: analysis_screen_id
+    accounts_screen: accounts_screen_id
+
+    MDBoxLayout:
+        orientation: 'vertical'
+
+        MDToolbar:
+            title: 'Budget'
+            md_bg_color: .2, .2, .2, 1
+            specific_text_color: 1, 1, 1, 1
+
+        MDBottomNavigation:
+            id: bottom_nav_id
+
+            PlansTab:
+                id: plans_screen_id
+
+            HistoryTab:
+                id: history_screen_id
+
+            HomeTab:
+                id: home_screen_id
+
+            AnalysisTab:
+                id: analysis_screen_id
+
+            AccountsTab:
+                id: accounts_screen_id

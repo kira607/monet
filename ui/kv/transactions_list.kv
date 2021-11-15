@@ -3,14 +3,13 @@
     secondary_text: "Secondary text here"
     tertiary_text: "fit more text than usual"
 
-    on_release: app.open_editor(self.transaction)
-
     IconLeftWidget:
         icon: "delete-outline"
         on_release: app.delete_transaction(root)
 
     IconRightWidget:
         icon: "pen"
+        on_release: app.open_editor(root.transaction)
 
 <TransactionsList>:
 

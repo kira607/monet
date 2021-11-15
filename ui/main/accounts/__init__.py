@@ -1,2 +1,2 @@
 from .accounts_list import AccountsList
-from .screen import ScreenAccounts
+from .accounts_tab import AccountsTab

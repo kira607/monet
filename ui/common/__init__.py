@@ -1,2 +1,2 @@
 from .custom_list import CustomList, CustomItem
-from .base_screen import BaseScreen
+from .base_screen import BaseTab

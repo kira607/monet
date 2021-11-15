@@ -1,0 +1,39 @@
+#:import TransactionsList ui.main.history.TransactionsList
+#:import AccountsList ui.main.accounts.AccountsList
+
+<PlansTab>:
+    name: 'tab: plan'
+    text: 'plan'
+    icon: 'calendar-month-outline'
+
+<HistoryTab>:
+    name: 'screen: history'
+    text: 'history'
+    icon: 'format-list-numbered'
+
+    transactions_list: transactions_list_id
+
+    ScrollView:
+        TransactionsList:
+            id: transactions_list_id
+
+<HomeTab>:
+    name: 'tab: home'
+    text: 'home'
+    icon: 'home'
+
+<AnalysisTab>:
+    name: 'tab: analysis'
+    text: 'analysis'
+    icon: 'chart-line'
+
+<AccountsTab>:
+    name: 'tab: accounts'
+    text: 'accounts'
+    icon: 'view-grid-outline'
+
+    accounts_list: accounts_list_id
+
+    ScrollView:
+        AccountsList:
+            id: accounts_list_id

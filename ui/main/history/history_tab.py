@@ -1,13 +1,11 @@
 from kivy.properties import ObjectProperty
 
 from db.models import Transaction
-from ui.common import BaseScreen
+from ui.common import BaseTab
 from .transactions_list import TransactionListItem, TransactionsList
 
 
-class ScreenHistory(BaseScreen):
-
-    count = 0
+class HistoryTab(BaseTab):
 
     transactions_list: TransactionsList = ObjectProperty()
 
@@ -17,8 +15,6 @@ class ScreenHistory(BaseScreen):
     def reload(self):
         print('reload history screen')
         self.transactions_list.clear()
-        db_list = self.budget.get(Transaction)
-        if self.count < 3 or self.count > 5:
-            for t in db_list:
-                self.transactions_list.add(TransactionListItem(t))
-        self.count += 1
+        db_list = self.db.get(Transaction)
+        for t in db_list:
+            self.transactions_list.add(TransactionListItem(t))

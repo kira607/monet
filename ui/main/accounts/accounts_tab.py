@@ -2,10 +2,10 @@ from kivy.properties import ObjectProperty
 
 from db.models import Account
 from .accounts_list import AccountListItem, AccountsList
-from ui.common import BaseScreen
+from ui.common import BaseTab
 
 
-class ScreenAccounts(BaseScreen):
+class AccountsTab(BaseTab):
 
     accounts_list: AccountsList = ObjectProperty()
 
