@@ -1,8 +1,6 @@
-pandas
+flask
 sqlalchemy
-kivy
-kivymd
-buildozer
+marshmallow
 
 # =================================
 # google sheets requirements
