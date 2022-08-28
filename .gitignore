@@ -129,5 +129,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Other staff
 .idea/
-budget/endpoint/google_sheets/.secrets/
+notes.txt

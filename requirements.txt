@@ -1,6 +1,7 @@
 flask
 sqlalchemy
 marshmallow
+gitpython
 
 # =================================
 # google sheets requirements
