@@ -1,3 +1,0 @@
-#!/bin/bash
-
-exec /home/kirill/programming/JetBrains-PyCharm/bin/pycharm.sh . & exit
