@@ -2,6 +2,7 @@ from flask import Flask
 
 from yaba.apps.auth import auth_app
 from yaba.apps.budget import budget_app
+from yaba.apps.system import system_app
 
 
 def create_app() -> Flask:
@@ -13,6 +14,7 @@ def create_app() -> Flask:
     new_app = Flask(__name__)
     new_app.register_blueprint(budget_app)
     new_app.register_blueprint(auth_app)
+    new_app.register_blueprint(system_app)
     return new_app
 
 
