@@ -1,7 +1,10 @@
 flask
-sqlalchemy
-marshmallow
+flask-admin
+Flask-Migrate
+Flask-SQLAlchemy
+flask-login
 gitpython
+marshmallow
 
 # =================================
 # google sheets requirements

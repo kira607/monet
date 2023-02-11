@@ -1,7 +1,7 @@
 import hashlib
 import hmac
 import os
-from typing import Tuple, Union, Dict, Any
+from typing import Any, Dict, Tuple, Union
 
 import git
 
