@@ -1,8 +1,8 @@
 from flask import Flask
 
-from yaba.apps.auth import auth_app
-from yaba.apps.budget import budget_app
-from yaba.apps.system import system_app
+from yaba.apps import auth_app
+from yaba.apps import budget_app
+from yaba.apps import system_app
 
 
 def create_app() -> Flask:
