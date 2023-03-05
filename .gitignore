@@ -132,3 +132,4 @@ dmypy.json
 # Other staff
 .idea/
 notes.txt
+.env.local
