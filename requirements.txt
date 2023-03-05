@@ -3,6 +3,7 @@ flask-admin
 Flask-Migrate
 Flask-SQLAlchemy
 flask-login
+pymysql
 gitpython
 marshmallow
 
