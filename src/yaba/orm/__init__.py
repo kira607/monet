@@ -1,7 +1,8 @@
+'''A package with orm stuff.'''
+
 import os
 
-from .db import db
-from .db import migrate
+from .db import db, migrate
 
 
 DB_DIALECT = os.environ.get('DB_DIALECT')
