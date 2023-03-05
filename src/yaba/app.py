@@ -1,10 +1,11 @@
+import logging
+
 from flask import Flask
 
 from yaba.apps.auth import auth_app
 from yaba.apps.budget import budget_app
 from yaba.apps.system import system_app
 from yaba.orm import DB_URI, db, migrate
-import logging
 
 
 logging.basicConfig(format='{asctime} [{levelname}]: {message}', style='{', level=logging.DEBUG)
@@ -23,7 +24,7 @@ def create_app() -> Flask:
     app.register_blueprint(auth_app)
     app.register_blueprint(system_app)
     logger.info(f'Using db uri: {DB_URI}')
-    app.config["SQLALCHEMY_DATABASE_URI"] = DB_URI
+    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
     db.init_app(app)
     migrate.init_app(app, db)
     return app
