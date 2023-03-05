@@ -1,4 +1,5 @@
 import pytest
+
 from yaba.apps.budget.coolf import coolf
 
 
@@ -9,7 +10,7 @@ from yaba.apps.budget.coolf import coolf
         (100, 200, 299),
     ),
 )
-def test_coolf(x, y, expected) -> None:
+def test_coolf(x: int, y: int, expected: int) -> None:
     '''Test coolf.'''
     result = coolf(x, y)
     assert result == expected

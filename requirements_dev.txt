@@ -5,28 +5,27 @@ pytest-cov
 
 # flake8 staff
 flake8
-flake8-annotations>=2.4.1
-flake8-broken-line>=0.3.0
-flake8-bugbear>=20.11.1
-flake8-builtins>=1.5.3
-flake8-commas>=2.0.0
-flake8-comprehensions>=3.3.0
-flake8-docstrings>=1.6.0
-flake8-eradicate>=1.0.0
-flake8-isort>=4.0.0
-flake8-mutable>=1.2.0
-flake8-pep3101>=1.3.0
-flake8-plugin-utils>=1.3.1
-flake8-polyfill>=1.0.2
-flake8-print>=4.0.0
-flake8-quotes>=3.2.0
-flake8-return>=1.1.2
-flake8-simplify>=0.11.0
-flake8-use-fstring>=1.1
+flake8-annotations
+flake8-broken-line
+flake8-bugbear
+flake8-builtins
+flake8-commas
+flake8-comprehensions
+flake8-docstrings
+flake8-eradicate
+flake8-isort
+flake8-mutable
+flake8-pep3101
+flake8-plugin-utils
+flake8-polyfill
+flake8-print
+flake8-quotes
+flake8-return
+flake8-simplify
+flake8-use-fstring
 
 # other
-isort>=5.7.0
-pep8-naming>=0.11.1
-yapf>=0.30.0
+isort
+pep8-naming
 tox
 mypy
