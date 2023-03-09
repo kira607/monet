@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('.static', filename='css/login_styles.css') }}">
+{% endblock %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+
+<form action="" method="post" class="form-contact">
+    <p><label>Username: </label><input type="text" name="username" value="" required /> </p>
+    <p><label>Password: </label><input type="password" name="password" value="" required /> </p>
+    <p><input type="checkbox" name="remember" /> Remember me </p>
+    <p><input type="submit" value="Log in" /> </p>
+    <p><a href="{{url_for('user.register')}}">Register</a> </p>
+</form>
+
+{% endblock %}

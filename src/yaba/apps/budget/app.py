@@ -1,5 +1,6 @@
-from flask import Blueprint
+from flask import Blueprint, render_template
 from flask import Response, make_response
+from flask_login import login_required, current_user
 
 from .controller import BudgetController
 
@@ -12,6 +13,12 @@ budget_app = Blueprint(
     url_prefix='/budget',
 )
 controller = BudgetController()
+
+
+@budget_app.route('/', methods=['GET'])
+@login_required
+def main():
+    return render_template('budget_main.html', user=current_user)
 
 
 @budget_app.route('/transaction/<transaction_id>/', methods=['GET'])

@@ -1,3 +1,3 @@
 '''Authentication app package.'''
 
-from .app import auth_app
+from .app import user_app

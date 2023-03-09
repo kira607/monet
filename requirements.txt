@@ -6,6 +6,7 @@ flask-login
 pymysql
 gitpython
 marshmallow
+cryptography
 
 # =================================
 # google sheets requirements

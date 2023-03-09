@@ -4,7 +4,13 @@ from flask import Response, current_app, make_response, request
 from .controller import SystemController
 
 
-system_app = Blueprint('system', __name__, url_prefix='/system')
+system_app = Blueprint(
+    'system',
+    __name__,
+    static_folder='static',
+    template_folder='templates',
+    url_prefix='/system',
+)
 controller = SystemController()
 
 

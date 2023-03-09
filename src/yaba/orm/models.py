@@ -1,36 +1,29 @@
-from typing import List, Optional
+from typing import List
 
+from flask_login import UserMixin
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+from werkzeug.security import check_password_hash, generate_password_hash
 
 from yaba.orm import db
 
 
-class User(db.Model):  # type: ignore
+class User(db.Model, UserMixin):  # type: ignore
     '''A user.'''
 
-    __tablename__ = 'user_account'
+    __tablename__ = 'users'
 
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
+
+    username: Mapped[str] = mapped_column(String(50))
     name: Mapped[str] = mapped_column(String(30))
-    fullname: Mapped[Optional[str]] = mapped_column(String(60))
-    addresses: Mapped[List['Address']] = relationship(back_populates='user')
+    lastname: Mapped[str] = mapped_column(String(30))
+    email: Mapped[str] = mapped_column(String(50))
+    password: Mapped[str] = mapped_column(String(102))
+
+    def check_password(self, other_password) -> bool:
+        return check_password_hash(self.password, other_password)
 
     def __repr__(self) -> str:
         '''Get a class repr.'''
-        return f'User(id={self.id!r}, name={self.name!r}, fullname={self.fullname!r})'
-
-
-class Address(db.Model):  # type: ignore
-    '''An email address related to user.'''
-
-    __tablename__ = 'address'
-
-    id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
-    email_address: Mapped[str] = mapped_column(String(50))
-    user_id = mapped_column(ForeignKey('user_account.id'))
-    user: Mapped[User] = relationship(back_populates='addresses')
-
-    def __repr__(self) -> str:
-        '''Get a class repr.'''
-        return f'Address(id={self.id!r}, email_address={self.email_address!r})'
+        return f'User(id={self.id!r}, username={self.name!r})'

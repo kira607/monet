@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block extra_head %}{% endblock %}
+{% block title %} Budget {% endblock %}
+
+{% block body %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+
+<h1>Budget main</h1>
+
+<p>My profile: <a href="{{ url_for('user.profile') }}"> {{ user.username }} </a></p>
+
+{% endblock %}
