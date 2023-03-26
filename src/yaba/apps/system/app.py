@@ -1,5 +1,4 @@
-from flask import Blueprint
-from flask import Response, current_app, make_response, request
+from flask import Blueprint, Response, current_app, make_response, request
 
 from .controller import SystemController
 

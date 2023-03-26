@@ -1,6 +1,5 @@
-from flask import Blueprint, render_template
-from flask import Response, make_response
-from flask_login import login_required, current_user
+from flask import Blueprint, Response, make_response, render_template
+from flask_login import current_user, login_required
 
 from .controller import BudgetController
 
@@ -17,7 +16,8 @@ controller = BudgetController()
 
 @budget_app.route('/', methods=['GET'])
 @login_required
-def main():
+def main() -> str:
+    '''Get a main budget app page.'''
     return render_template('budget_main.html', user=current_user)
 
 

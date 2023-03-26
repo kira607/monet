@@ -3,12 +3,13 @@ import os
 
 from flask import Flask
 
-from yaba.apps.user import user_app
-from yaba.apps.user.app import login_manager
 from yaba.apps.budget import budget_app
 from yaba.apps.root import root_app
 from yaba.apps.system import system_app
+from yaba.apps.user import user_app
+from yaba.apps.user.app import login_manager
 from yaba.orm import DB_URI, db, migrate
+
 
 logging.basicConfig(format='{asctime} [{levelname}]: {message}', style='{', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
