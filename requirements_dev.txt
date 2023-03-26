@@ -1,9 +1,9 @@
-# pytest staff
+# pytest stuff
 pytest
 pytest-mock
 pytest-cov
 
-# flake8 staff
+# flake8 stuff
 flake8
 flake8-annotations
 flake8-broken-line
@@ -27,5 +27,5 @@ flake8-use-fstring
 # other
 isort
 pep8-naming
-tox
-mypy
+tox==4.4.7
+mypy==1.1.1
