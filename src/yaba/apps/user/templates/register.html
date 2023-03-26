@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block extra_head %}{% endblock %}
+{% block title %} Register {% endblock %}
+
+{% block body %}
+
+{% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{cat}}">{{msg}}</div>
+{% endfor %}
+
+<form action="/user/register" method="post" class="form-contact">
+  <p><label>Никнэйм: </label>
+    <input type="text" name="username" value="" required />
+  <p><label>Имя: </label>
+    <input type="text" name="name" value="" required />
+  <p><label>Фамилия: </label>
+    <input type="text" name="lastname" value="" required />
+  <p><label>Email: </label>
+    <input type="text" name="email" value="" required />
+  <p><label>Пароль: </label>
+    <input type="password" name="password1" value="" required />
+  <p><label>Повтор пароля: </label>
+    <input type="password" name="password2" value="" required />
+
+  <p><input type="submit" value="Регистрация" />
+
+  <p>Already a member? <a href="{{ url_for('user.login') }}">Log in</a></p>
+
+  <input type=hidden value="{{ next or '' }}" name=next>
+</form>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 
 
 class AuthController:
-    '''An auth app controller.'''
+    '''An user app controller.'''
 
     pass

@@ -133,3 +133,6 @@ dmypy.json
 .idea/
 notes.txt
 .env.local
+.vscode/
+sandbox.py
+google_oauth.json

@@ -1,4 +1,4 @@
-# budget
+# yaba
 
 ![Tests](https://github.com/kira607/yaba/actions/workflows/tests.yaml/badge.svg)
 
@@ -31,7 +31,7 @@ From the repo root run:
 
 ## Migrations
 
-If db models are changed do following: 
+If db models are changed do following:
 
 1. Create new version:
     ```bash
