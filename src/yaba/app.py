@@ -41,7 +41,8 @@ def create_app() -> Flask:
 def main() -> None:
     '''Run entry point.'''
     app = create_app()
-    app.run(debug=True)
+    logger.info('Running app...')
+    app.run(debug=True, ssl_context='adhoc')
 
 
 if __name__ == '__main__':

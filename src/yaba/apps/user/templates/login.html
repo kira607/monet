@@ -17,7 +17,11 @@
     <p><label>Password: </label><input type="password" name="password" value="" required /> </p>
     <p><input type="checkbox" name="remember" /> Remember me </p>
     <p><input type="submit" value="Log in" /> </p>
-    <p><a href="{{url_for('user.register')}}">Register</a> </p>
+    <p><a href="{{ url_for('user.register') }}">Register</a> </p>
 </form>
+
+<p>
+    or <a href="{{ url_for('user.google_login') }}">Login with Google</a>
+</p>
 
 {% endblock %}
