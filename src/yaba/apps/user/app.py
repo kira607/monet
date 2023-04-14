@@ -85,7 +85,7 @@ def register() -> Response | str:
 def login() -> Response | str:
     '''Get a login page or login a user.'''
     logger.info('User login called...')
-    
+
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
 
