@@ -3,6 +3,7 @@ from flask_login import LoginManager, current_user, login_required, login_user, 
 from werkzeug import Response
 from werkzeug.security import generate_password_hash
 
+from yaba.logger import logger
 from yaba.orm import db
 from yaba.orm.models import User
 
@@ -83,6 +84,8 @@ def register() -> Response | str:
 @user_app.route('/login', methods=['GET', 'POST'])
 def login() -> Response | str:
     '''Get a login page or login a user.'''
+    logger.info('User login called...')
+    
     if current_user.is_authenticated:
         return redirect(url_for('user.profile'))
 

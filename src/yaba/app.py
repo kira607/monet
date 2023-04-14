@@ -1,4 +1,3 @@
-import logging
 import os
 
 from flask import Flask
@@ -8,11 +7,8 @@ from yaba.apps.root import root_app
 from yaba.apps.system import system_app
 from yaba.apps.user import user_app
 from yaba.apps.user.app import login_manager
+from yaba.logger import configure_logger
 from yaba.orm import DB_URI, db, migrate
-
-
-logging.basicConfig(format='{asctime} [{levelname}]: {message}', style='{', level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 
 def create_app() -> Flask:
@@ -21,16 +17,17 @@ def create_app() -> Flask:
 
     :return: A flask app.
     '''
-    logger.info('Creating app...')
+    configure_logger()
     app = Flask(__name__)
     app.register_blueprint(user_app)
     app.register_blueprint(budget_app)
     app.register_blueprint(root_app)
     app.register_blueprint(system_app)
+    app.logger.info(f'Registered blueprints: {list(app.blueprints.keys())}')
 
-    logger.info(f'Using db uri: {DB_URI}')
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+    app.config['EXPLAIN_TEMPLATE_LOADING'] = True
 
     db.init_app(app)
     migrate.init_app(app, db)
@@ -47,3 +44,4 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
