@@ -6,6 +6,11 @@ from werkzeug.security import check_password_hash
 from yaba.orm import db
 
 
+__all__ = [
+    'User',
+]
+
+
 class User(db.Model, UserMixin):  # type: ignore
     '''A user.'''
 

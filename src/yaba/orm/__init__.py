@@ -3,6 +3,7 @@
 import os
 
 from .db import db, migrate
+from .models import *
 
 
 DB_DIALECT = os.environ.get('DB_DIALECT')
