@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 
+from yaba.admin import admin
 from yaba.apps.budget import budget_app
 from yaba.apps.root import root_app
 from yaba.apps.system import system_app
@@ -27,11 +28,14 @@ def create_app() -> Flask:
 
     app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
     app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    if app.config.get('DEBUG'):
+        app.config['EXPLAIN_TEMPLATE_LOADING'] = True
 
     db.init_app(app)
+    app.logger.info(f'Models: {db.Model.__subclasses__()}')
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    admin.init_app(app)
 
     return app
 
