@@ -37,7 +37,6 @@ def create_app() -> Flask:
     login_manager.init_app(app)
     admin.init_app(app)
 
-
     return app
 
 

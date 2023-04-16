@@ -3,7 +3,7 @@
 import os
 
 from .db import db, migrate
-from .models import *
+from .models import *  # noqa: F403
 
 
 DB_DIALECT = os.environ.get('DB_DIALECT')
