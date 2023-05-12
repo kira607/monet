@@ -1,15 +1,14 @@
 {% extends "base.html" %}
-{% block extra_head %}{% endblock %}
-{% block title %} Budget {% endblock %}
+{% import 'macro.html' as m %}
+{% block page_title %} Budget {% endblock %}
 
-{% block body %}
+{% block page_content %}
+    {{ m.heading('Budget main') }}
+    {{ m.show_flash() }}
 
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div>
-{% endfor %}
+    <p>App functionality coming soon!</p>
+{% endblock %}
 
-<h1>Budget main</h1>
-
-<p>My profile: <a href="{{ url_for('user.profile') }}"> {{ user.username }} </a></p>
-
+{% block page_scripts %}
+    <script>$("#home").addClass('active')</script>
 {% endblock %}
