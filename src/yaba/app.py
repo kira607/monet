@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_bootstrap import Bootstrap
 
 from yaba.admin import admin
 from yaba.apps.budget import budget_app
@@ -34,6 +35,7 @@ def create_app() -> Flask:
     migrate.init_app(app, db)
     login_manager.init_app(app)
     admin.init_app(app)
+    Bootstrap(app)
 
     return app
 
