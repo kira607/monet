@@ -1,17 +1,15 @@
 {% extends "base.html" %}
-{% block extra_head %}{% endblock %}
-{% block title %} Profile {% endblock %}
+{% import 'macro.html' as m %}
+{% block page_title %} Profile {% endblock %}
 
-{% block body %}
+{% block page_content %}
+    {{ m.heading('My profile') }}
+    {{ m.show_flash() }}
 
-<h1>Profile page</h1>
+    <p>Name: {{ user.name }}</p>
+    <p>Email: {{ user.email }}</p>
+{% endblock %}
 
-<p>Username: {{ user.username }}</p>
-<p>Name: {{ user.name }}</p>
-<p>Lastname: {{ user.lastname }}</p>
-<p>Email: {{ user.email }}</p>
-
-<p><a href="{{ url_for('budget.main') }}">Go to budget</a></p>
-<p><a href="{{ url_for('user.logout')}}">Log out</a></p>
-
+{% block page_scripts %}
+    <script>$("#profile-dropdown").addClass('active')</script>
 {% endblock %}

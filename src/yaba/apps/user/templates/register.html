@@ -1,32 +1,40 @@
 {% extends "base.html" %}
-{% block extra_head %}{% endblock %}
-{% block title %} Register {% endblock %}
+{% import 'macro.html' as m %}
+{% block page_title %} Register {% endblock %}
 
-{% block body %}
+{% block page_content %}
+{{ m.heading('Register') }}
+{{ m.show_flash() }}
 
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div>
-{% endfor %}
+<div class="container px-5 my-5">
+    <form id="registerForm" action="{{ url_for('user.register') }}" method="post">
 
-<form action="/user/register" method="post" class="form-contact">
-  <p><label>Никнэйм: </label>
-    <input type="text" name="username" value="" required />
-  <p><label>Имя: </label>
-    <input type="text" name="name" value="" required />
-  <p><label>Фамилия: </label>
-    <input type="text" name="lastname" value="" required />
-  <p><label>Email: </label>
-    <input type="text" name="email" value="" required />
-  <p><label>Пароль: </label>
-    <input type="password" name="password1" value="" required />
-  <p><label>Повтор пароля: </label>
-    <input type="password" name="password2" value="" required />
+        {% for field in form if field.name not in ['csrf_token', 'submit'] -%}
+        <div class="form-floating mb-3 validated">
+            {{ m.render_field(field) }}
+        </div>
+        {% endfor %}
 
-  <p><input type="submit" value="Регистрация" />
+        <!--        <div class="form-floating mb-3">-->
+        <!--            <input class="form-control" id="email" type="email" placeholder="Email" data-sb-validations="required,email" />-->
+        <!--            <label for="email">Email</label>-->
+        <!--            <div class="invalid-feedback" data-sb-feedback="email:required">Email is required.</div>-->
+        <!--            <div class="invalid-feedback" data-sb-feedback="email:email">Email Email is not valid.</div>-->
+        <!--        </div>-->
 
-  <p>Already a member? <a href="{{ url_for('user.login') }}">Log in</a></p>
+        <div class="d-grid mt-3">
+            {{ form.submit(class_='btn btn-primary btn-lg') }}
+        </div>
+        <input type=hidden value="{{ next or '' }}" name=next>
+        {{ form.hidden_tag() }}
+    </form>
 
-  <input type=hidden value="{{ next or '' }}" name=next>
-</form>
+    <div class="container-md pt-5 text-center">
+        <p>Already a member? <a href="{{ url_for('user.login') }}">Log in</a></p>
+    </div>
+</div>
+{% endblock %}
 
+{% block page_scripts %}
+    <script>$("#register").addClass('active')</script>
 {% endblock %}
