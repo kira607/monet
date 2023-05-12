@@ -1,0 +1,30 @@
+{% macro show_alert(msg, cat) %}
+  <div class="alert alert-{{ cat }} alert-dismissible fade show" role="alert">
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    {{ msg }}
+  </div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+  <div class="form-floating mb-3">
+    {{ field(class_='form-control', placeholder=field.name) }}
+    {{ field.label() }}
+
+    {% for e in field.errors %}
+      {{ show_alert(e, 'danger') }}
+    {% endfor %}
+  </div>
+{% endmacro %}
+
+{% macro show_flash() %}
+  {% for cat, msg in get_flashed_messages(True) %}
+    {{ show_alert(msg, cat) }}
+  {% endfor %}
+{% endmacro %}
+
+{% macro heading(text) %}
+<div class="container-lg text-center fs-1 mt-5">
+    <h1>{{ text }}</h1>
+</div>
+{% endmacro %}
+
