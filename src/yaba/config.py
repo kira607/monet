@@ -1,5 +1,6 @@
 
 import os
+from datetime import datetime
 from typing import Any, Callable
 
 
@@ -7,7 +8,7 @@ class ConfigField:
     '''
     A config object field descriptor.
 
-    :param value: A field default value.
+    :param default_value: A field default value.
     :param env: If true, upon name set descriptor will try to
       find an environment variable with the same name.
     :param env_name: A name of the environment variable to find.
@@ -17,14 +18,15 @@ class ConfigField:
 
     def __init__(
         self,
-        value: Any = None,
+        default_value: Any = None,
         *,
         env: bool = True,
         env_name: str | None = None,
-        cast: Callable[[Any], Any] = str,
+        cast: Callable[[Any], Any] | None = str,
         secret: bool = False,
     ) -> None:
-        self._value = value
+        self._value = None
+        self._default_value = default_value
         self._env = env
         self._env_name = env_name
         self._cast = cast
@@ -33,10 +35,16 @@ class ConfigField:
     def __set_name__(self, owner: type['YabaConfig'], name: str) -> None:
         self._name = name
         self._env_name = self._env_name or self._name
-        fields = owner._fields
-        fields.append(self)
-        if self._env:
-            self.value = os.getenv(self._env_name)
+        owner._fields.append(self)
+        
+        if not self._env:
+            return
+
+        value = os.getenv(self._env_name) or self._default_value
+        if value is None:
+            raise Exception(f'Could not find environment variable {self._env_name}')
+        
+        self.value = value
 
     def __set__(self, obj: object, value: Any) -> None:
         raise RuntimeError('Cannot assign config value')
@@ -56,7 +64,9 @@ class ConfigField:
 
     @value.setter
     def value(self, value: Any) -> Any:
-        self._value = self._cast(value)
+        if self._cast:
+            self._value = self._cast(value)
+        self._value = value
 
     @property
     def is_secret(self) -> bool:
@@ -66,7 +76,9 @@ class ConfigField:
 def validate_bool_field(value: str | None) -> bool:
     if value is None:
         return False
-    return value.lower() in ('true', '1')
+    if isinstance(value, bool):
+        return value
+    return str(value).lower() in ('true', '1')
 
 
 class YabaConfig:
@@ -80,14 +92,21 @@ class YabaConfig:
 
     # Flask
     FLASK_APP = ConfigField()
-    EXPLAIN_TEMPLATE_LOADING = ConfigField(cast=validate_bool_field)
-    FLASK_DEBUG = ConfigField(cast=validate_bool_field)
+    SECRET_KEY = ConfigField(secret=True)
+    PRESERVE_CONTEXT_ON_EXCEPTION = ConfigField(True, cast=validate_bool_field)
+    EXPLAIN_TEMPLATE_LOADING = ConfigField(False, cast=validate_bool_field)
+    FLASK_DEBUG = ConfigField(False, cast=validate_bool_field)
+
+    # Flask-Login
+    REMEMBER_COOKIE_SAMESITE=ConfigField('strict')
+    SESSION_COOKIE_SAMESITE=ConfigField('strict')
+
     # Logging
     LOGGING_LEVEL = ConfigField()
-    # Secrets
-    SECRET_KEY = ConfigField(secret=True)
+
+    # Deployment
     DEPLOY_SECRET_KEY = ConfigField(secret=True)
-    SECURITY_PASSWORD_SALT = ConfigField(secret=True)
+
     # Database
     DB_DIALECT = ConfigField()
     DB_DRIVER = ConfigField()
@@ -96,6 +115,7 @@ class YabaConfig:
     DB_HOSTNAME = ConfigField(secret=True)
     DB_NAME = ConfigField(secret=True)
     SQLALCHEMY_DATABASE_URI = ConfigField(env=False, secret=True)
+
     # Google OAuth
     GOOGLE_CLIENT_ID = ConfigField(secret=True)
     GOOGLE_CLIENT_SECRET = ConfigField(secret=True)
@@ -109,6 +129,7 @@ class YabaConfig:
             f'@{self.DB_HOSTNAME}'
             f'/{self.DB_NAME}'
         )
+        # self.__class__.EXPLAIN_TEMPLATE_LOADING.value = self.FLASK_DEBUG
 
     def __str__(self) -> str:
         '''
