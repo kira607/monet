@@ -1,13 +1,16 @@
+# mypy: disable-error-code="assignment"
+
+import bcrypt
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from werkzeug import Response
-from werkzeug.security import generate_password_hash
 
 from yaba.logger import logger
 from yaba.orm import db
-from yaba.orm.models import User
+from yaba.orm.models import User, UserEvent, UserEventType
 
-from .controller import AuthController
+from .controller import UserController
+from .forms import UserLoginForm, UserRegistrationForm
 
 
 user_app = Blueprint(
@@ -18,7 +21,7 @@ user_app = Blueprint(
     url_prefix='/user',
     static_url_path='static',
 )
-controller = AuthController()
+controller = UserController()
 login_manager = LoginManager()
 
 login_manager.login_view = 'user.login'
@@ -32,53 +35,55 @@ def load_user(user_id: int) -> User:
     return User.query.filter_by(id=user_id).first()
 
 
+@user_app.route('/', methods=['GET'])
+def root() -> Response | str:
+    '''Get an app root.'''
+    if current_user.is_authenticated():
+        return redirect(url_for('user.profile'))
+    return redirect(url_for('user.login'))
+
+
 @user_app.route('/register', methods=['GET', 'POST'])
 def register() -> Response | str:
     '''Register a new user.'''
-    if request.method == 'POST':
-        username = request.form['username']
-        name = request.form['name']
-        lastname = request.form['lastname']
-        email = request.form['email']
-        password1 = request.form['password1']
-        password2 = request.form['password2']
+    form = UserRegistrationForm(request.form)
 
-        if len(username) <= 4:
-            flash('Name must be at least 4 characters')
-            return redirect(url_for('user.register'))
-        if User.query.filter_by(username=username).first():
-            flash('User with given username already exists')
-            return redirect(url_for('user.register'))
-        if len(request.form['email']) <= 4:
-            flash('Wrong email')
-            return redirect(url_for('user.register'))
-        if User.query.filter_by(email=email).first():
-            flash('User with given email already exists')
-            return redirect(url_for('user.register'))
-        if len(password1) < 8:
-            flash('Password must be at least 8 characters')
-            return redirect(url_for('user.register'))
-        if password1 != password2:
-            flash('Passwords do not match')
-            return redirect(url_for('user.register'))
+    if form.validate_on_submit():
+
+        if User.query.filter_by(email=form.email.data).first():
+            form.email.errors.append('User with given email already exists')
+            return render_template('register.html', form=form)
 
         try:
             new_user = User()
-            new_user.username = username
-            new_user.name = name
-            new_user.lastname = lastname
-            new_user.email = email
-            new_user.password = generate_password_hash(password1)
+            new_user.name = form.name.data
+            new_user.email = form.email.data
+            new_user.password = bcrypt.hashpw(form.password.data.encode('utf-8'), bcrypt.gensalt())
+
+            reg_event = UserEvent()
+            reg_event.event_type = UserEventType.REGISTER
+            reg_event.ip = request.remote_addr
+
             db.session.add(new_user)
             db.session.commit()
+
+            reg_event.user_id = new_user.id
+
+            db.session.add(reg_event)
+            db.session.commit()
         except Exception as e:
-            flash(f'Error while registering user (DB query failed): {e}')
-            return redirect(url_for('user.register'))
+            flash(f'Error while registering user (DB query failed): {e}', 'danger')
+            return render_template('register.html', form=form)
 
         flash('Registration successful!', 'success')
         return redirect(url_for('user.login'))
 
-    return render_template('register.html')
+    for field in form:
+        if field.errors:
+            for error in field.errors:
+                logger.info(f'Error in field {field.name}: {error}')
+
+    return render_template('register.html', form=form)
 
 
 @user_app.route('/login', methods=['GET', 'POST'])
@@ -86,27 +91,35 @@ def login() -> Response | str:
     '''Get a login page or login a user.'''
     logger.info('User login called...')
 
-    if current_user.is_authenticated:
-        return redirect(url_for('user.profile'))
+    form = UserLoginForm()
 
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        remember = bool(request.form.get('remember'))
+    if form.validate_on_submit():
 
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if not user:
-            flash('Wrong username')
-            return redirect(url_for('user.login'))
+            flash('Wrong username', 'danger')
+            return render_template('login.html', form=form)
 
-        if not user.check_password(password):
-            flash('Wrong password')
-            return redirect(url_for('user.login'))
+        if not bcrypt.checkpw(form.password.data.encode('utf-8'), user.password.encode('utf-8')):
+            flash('Wrong password', 'danger')
+            return render_template('login.html', form=form)
 
-        login_user(user, remember=remember)
-        return redirect(request.args.get('next') or url_for('user.profile'))
+        login_user(user, remember=form.remember.data)
 
-    return render_template('login.html')
+        try:
+            reg_event = UserEvent()
+            reg_event.event_type = UserEventType.LOGIN
+            reg_event.ip = request.remote_addr
+            reg_event.user_id = user.id
+            db.session.add(reg_event)
+            db.session.commit()
+        except Exception as e:
+            flash(f'Error while registering user (DB query failed): {e}', 'danger')
+            return redirect(url_for('user.register', form=form))
+
+        return redirect(request.args.get('next') or url_for('budget.main'))
+
+    return render_template('login.html', form=form)
 
 
 @user_app.route('/profile', methods=['GET'])
@@ -120,6 +133,15 @@ def profile() -> str:
 @login_required
 def logout() -> Response:
     '''Logout current user.'''
+    try:
+        log_out_event = UserEvent()
+        log_out_event.event_type = UserEventType.LOG_OUT
+        log_out_event.ip = request.remote_addr
+        log_out_event.user_id = current_user.id
+        db.session.add(log_out_event)
+        db.session.commit()
+    except Exception as e:
+        flash(f'Error while logging out user (DB query failed): {e}', 'danger')
     logout_user()
     flash('You have logged out', 'success')
     return redirect(url_for('user.login'))

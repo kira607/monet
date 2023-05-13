@@ -1,23 +1,25 @@
 {% extends "base.html" %}
+{% import 'macro.html' as m %}
+{% block page_title %} Login {% endblock %}
 
-{% block extra_head %}
-<link rel="stylesheet" href="{{ url_for('.static', filename='css/login_styles.css') }}">
+{% block page_content %}
+{{ m.heading('Login') }}
+{{ m.show_flash() }}
+
+<div class="container px-5 my-5">
+    <form id="login-form" action="{{ url_for('user.login') }}" method="post">
+        {{ m.render_field(form.email) }}
+        {{ m.render_field(form.password) }}
+        {{ form.remember() }} {{ form.remember.label}}
+        <div class="d-grid mt-3">
+            {{ form.submit(class_='btn btn-primary btn-lg') }}
+        </div>
+        {{ form.hidden_tag() }}
+    </form>
+</div>
+
 {% endblock %}
 
-{% block title %} Login {% endblock %}
-
-{% block body %}
-
-{% for cat, msg in get_flashed_messages(True) %}
-<div class="flash {{cat}}">{{msg}}</div>
-{% endfor %}
-
-<form action="" method="post" class="form-contact">
-    <p><label>Username: </label><input type="text" name="username" value="" required /> </p>
-    <p><label>Password: </label><input type="password" name="password" value="" required /> </p>
-    <p><input type="checkbox" name="remember" /> Remember me </p>
-    <p><input type="submit" value="Log in" /> </p>
-    <p><a href="{{url_for('user.register')}}">Register</a> </p>
-</form>
-
+{% block page_scripts %}
+    <script>$("#login").addClass('active')</script>
 {% endblock %}

@@ -1,6 +1,2 @@
-
-
-class AuthController:
+class UserController:
     '''An user app controller.'''
-
-    pass

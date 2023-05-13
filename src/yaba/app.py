@@ -1,6 +1,5 @@
-import os
-
 from flask import Flask
+from flask_bootstrap import Bootstrap
 
 from yaba.admin import admin
 from yaba.apps.budget import budget_app
@@ -8,8 +7,9 @@ from yaba.apps.root import root_app
 from yaba.apps.system import system_app
 from yaba.apps.user import user_app
 from yaba.apps.user.app import login_manager
+from yaba.config import YabaConfig
 from yaba.logger import configure_logger
-from yaba.orm import DB_URI, db, migrate
+from yaba.orm import db, migrate
 
 
 def create_app() -> Flask:
@@ -26,16 +26,16 @@ def create_app() -> Flask:
     app.register_blueprint(system_app)
     app.logger.info(f'Registered blueprints: {list(app.blueprints.keys())}')
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = DB_URI
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-    if app.config.get('DEBUG'):
-        app.config['EXPLAIN_TEMPLATE_LOADING'] = True
+    config = YabaConfig()
+    app.logger.info(f'Loaded config: {config}')
+    app.config.from_object(config)
 
     db.init_app(app)
     app.logger.info(f'Models: {db.Model.__subclasses__()}')
     migrate.init_app(app, db)
     login_manager.init_app(app)
     admin.init_app(app)
+    Bootstrap(app)
 
     return app
 
