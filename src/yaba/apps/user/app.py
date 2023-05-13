@@ -1,15 +1,8 @@
+# mypy: disable-error-code="assignment"
+
 import bcrypt
-from flask import Blueprint
-from flask import flash
-from flask import redirect
-from flask import render_template
-from flask import request
-from flask import url_for
-from flask_login import LoginManager
-from flask_login import current_user
-from flask_login import login_required
-from flask_login import login_user
-from flask_login import logout_user
+from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask_login import LoginManager, current_user, login_required, login_user, logout_user
 from werkzeug import Response
 
 from yaba.logger import logger
@@ -17,7 +10,7 @@ from yaba.orm import db
 from yaba.orm.models import User, UserEvent, UserEventType
 
 from .controller import UserController
-from .forms import UserRegistrationForm, UserLoginForm
+from .forms import UserLoginForm, UserRegistrationForm
 
 
 user_app = Blueprint(
@@ -43,11 +36,11 @@ def load_user(user_id: int) -> User:
 
 
 @user_app.route('/', methods=['GET'])
-def root():
+def root() -> Response | str:
+    '''Get an app root.'''
     if current_user.is_authenticated():
         return redirect(url_for('user.profile'))
-    else:
-        return redirect(url_for('user.login'))
+    return redirect(url_for('user.login'))
 
 
 @user_app.route('/register', methods=['GET', 'POST'])
@@ -60,7 +53,7 @@ def register() -> Response | str:
         if User.query.filter_by(email=form.email.data).first():
             form.email.errors.append('User with given email already exists')
             return render_template('register.html', form=form)
-        
+
         try:
             new_user = User()
             new_user.name = form.name.data
@@ -85,12 +78,10 @@ def register() -> Response | str:
         flash('Registration successful!', 'success')
         return redirect(url_for('user.login'))
 
-    else:
-
-        for field in form:
-            if field.errors:
-                for error in field.errors:
-                    logger.info(f'Error in field {field.name}: {error}')
+    for field in form:
+        if field.errors:
+            for error in field.errors:
+                logger.info(f'Error in field {field.name}: {error}')
 
     return render_template('register.html', form=form)
 
@@ -129,6 +120,7 @@ def login() -> Response | str:
         return redirect(request.args.get('next') or url_for('budget.main'))
 
     return render_template('login.html', form=form)
+
 
 @user_app.route('/profile', methods=['GET'])
 @login_required

@@ -1,5 +1,8 @@
+# mypy: disable-error-code="name-defined,no-redef"
+
 import datetime
 from enum import Enum
+
 from flask_login import UserMixin
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
@@ -63,9 +66,11 @@ class User(db.Model, UserMixin):
     def __repr__(self) -> str:
         '''Get a class repr.'''
         return f'User(id={self.id!r}, email={self.email!r})'
-    
+
 
 class UserEventType(Enum):
+    '''A user event.'''
+
     REGISTER = 'register'
     LOGIN = 'login'
     LOG_OUT = 'log out'
@@ -92,4 +97,3 @@ class UserEvent(db.Model):
     # Stuff
     user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'))
     user: Mapped['User'] = db.relationship(back_populates='events')
-

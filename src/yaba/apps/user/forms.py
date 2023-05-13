@@ -1,12 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField
-from wtforms import SubmitField
-from wtforms import BooleanField
-from wtforms import PasswordField
-from wtforms.validators import DataRequired
-from wtforms.validators import Email
-from wtforms.validators import EqualTo
-from wtforms.validators import Length
+from wtforms import BooleanField, PasswordField, StringField, SubmitField
+from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 
 class UserRegistrationForm(FlaskForm):
@@ -18,7 +12,7 @@ class UserRegistrationForm(FlaskForm):
         'Password',
         validators=[
             DataRequired(),
-            Length(min=8, max=50, message="Password length must be at least 8 and at most 50 characters"),
+            Length(min=8, max=50, message='Password length must be at least 8 and at most 50 characters'),
         ],
     )
     password_confirmation = PasswordField(
@@ -27,7 +21,7 @@ class UserRegistrationForm(FlaskForm):
             EqualTo('password', 'Passwords dot not match'),
         ],
     )
-    submit = SubmitField('Let\'s go!')
+    submit = SubmitField("Let\'s go!")
 
 
 class UserLoginForm(FlaskForm):

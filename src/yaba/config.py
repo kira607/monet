@@ -1,6 +1,4 @@
-
 import os
-from datetime import datetime
 from typing import Any, Callable
 
 
@@ -18,7 +16,7 @@ class ConfigField:
 
     def __init__(
         self,
-        default_value: Any = None,
+        default_value: Any = None,  # noqa: ANN401
         *,
         env: bool = True,
         env_name: str | None = None,
@@ -32,48 +30,52 @@ class ConfigField:
         self._cast = cast
         self._secret = secret
 
-    def __set_name__(self, owner: type['YabaConfig'], name: str) -> None:
+    def __set_name__(self, owner: type['YabaConfig'], name: str) -> None:  # noqa: D105
         self._name = name
         self._env_name = self._env_name or self._name
         owner._fields.append(self)
-        
+
         if not self._env:
             return
 
         value = os.getenv(self._env_name) or self._default_value
         if value is None:
             raise Exception(f'Could not find environment variable {self._env_name}')
-        
+
         self.value = value
 
-    def __set__(self, obj: object, value: Any) -> None:
+    def __set__(self, obj: object, value: Any) -> None:  # noqa: ANN401, D105
         raise RuntimeError('Cannot assign config value')
 
-    def __get__(self, obj: object, objtype: type['YabaConfig']) -> Any:
+    def __get__(self, obj: object, objtype: type['YabaConfig']) -> Any:  # noqa: ANN401, D105
         if obj is None:
             return self
         return self.value
 
     @property
     def name(self) -> str:
+        '''Get a config parameter name.'''
         return self._name
 
     @property
-    def value(self) -> Any:
+    def value(self) -> Any:  # noqa: ANN401
+        '''Get a config parameter value.'''
         return self._value
 
     @value.setter
-    def value(self, value: Any) -> Any:
+    def value(self, value: Any) -> Any:  # noqa: ANN401
         if self._cast:
             self._value = self._cast(value)
         self._value = value
 
     @property
     def is_secret(self) -> bool:
+        '''Get if parameter is secret.'''
         return self._secret
 
 
 def validate_bool_field(value: str | None) -> bool:
+    '''Cast dotenv field to python bool type.'''
     if value is None:
         return False
     if isinstance(value, bool):
@@ -98,8 +100,8 @@ class YabaConfig:
     FLASK_DEBUG = ConfigField(False, cast=validate_bool_field)
 
     # Flask-Login
-    REMEMBER_COOKIE_SAMESITE=ConfigField('strict')
-    SESSION_COOKIE_SAMESITE=ConfigField('strict')
+    REMEMBER_COOKIE_SAMESITE = ConfigField('strict')
+    SESSION_COOKIE_SAMESITE = ConfigField('strict')
 
     # Logging
     LOGGING_LEVEL = ConfigField()
@@ -129,7 +131,6 @@ class YabaConfig:
             f'@{self.DB_HOSTNAME}'
             f'/{self.DB_NAME}'
         )
-        # self.__class__.EXPLAIN_TEMPLATE_LOADING.value = self.FLASK_DEBUG
 
     def __str__(self) -> str:
         '''
