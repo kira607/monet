@@ -20,7 +20,7 @@ def create_app() -> Flask:
     '''
     config = Config()
     configure_logger(config.LOGGING_LEVEL)
-    
+
     app = Flask(__name__)
     app.register_blueprint(user_app)
     app.register_blueprint(budget_app)

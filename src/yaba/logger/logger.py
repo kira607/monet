@@ -1,5 +1,4 @@
 import logging
-import os
 
 from flask import current_app
 from werkzeug.local import LocalProxy
