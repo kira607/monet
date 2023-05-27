@@ -7,7 +7,7 @@ from yaba.apps.root import root_app
 from yaba.apps.system import system_app
 from yaba.apps.user import user_app
 from yaba.apps.user.app import login_manager
-from yaba.config import YabaConfig
+from yaba.config import Config
 from yaba.logger import configure_logger
 from yaba.orm import db, migrate
 
@@ -18,7 +18,9 @@ def create_app() -> Flask:
 
     :return: A flask app.
     '''
-    configure_logger()
+    config = Config()
+    configure_logger(config.LOGGING_LEVEL)
+
     app = Flask(__name__)
     app.register_blueprint(user_app)
     app.register_blueprint(budget_app)
@@ -26,9 +28,8 @@ def create_app() -> Flask:
     app.register_blueprint(system_app)
     app.logger.info(f'Registered blueprints: {list(app.blueprints.keys())}')
 
-    config = YabaConfig()
-    app.logger.info(f'Loaded config: {config}')
     app.config.from_object(config)
+    app.config.from_envvar('CONFIG_EXT', silent=True)
 
     db.init_app(app)
     app.logger.info(f'Models: {db.Model.__subclasses__()}')

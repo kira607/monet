@@ -1,129 +1,45 @@
-import os
-from typing import Any, Callable
+from datetime import timedelta
 
 
-class ConfigField:
-    '''
-    A config object field descriptor.
+class Config:
+    '''A base configuration class.'''
 
-    :param default_value: A field default value.
-    :param env: If true, upon name set descriptor will try to
-      find an environment variable with the same name.
-    :param env_name: A name of the environment variable to find.
-    :param cast: A callable executed on value on each set (basically validator).
-    :param secret: If true, value won't show up in __str__ of :class:`YabaConfig`.
-    '''
+    # Flask - https://flask.palletsprojects.com/en/2.3.x/config/
 
-    def __init__(
-        self,
-        default_value: Any = None,  # noqa: ANN401
-        *,
-        env: bool = True,
-        env_name: str | None = None,
-        cast: Callable[[Any], Any] | None = str,
-        secret: bool = False,
-    ) -> None:
-        self._value = None
-        self._default_value = default_value
-        self._env = env
-        self._env_name = env_name
-        self._cast = cast
-        self._secret = secret
+    FLASK_APP = 'src/yaba.app:create_app()'
+    SECRET_KEY = 'a secret key'
+    PRESERVE_CONTEXT_ON_EXCEPTION = True
+    EXPLAIN_TEMPLATE_LOADING = False
+    SESSION_COOKIE_SAMESITE = 'Lax'
+    TESING = False
+    DEBUG = True
 
-    def __set_name__(self, owner: type['YabaConfig'], name: str) -> None:  # noqa: D105
-        self._name = name
-        self._env_name = self._env_name or self._name
-        owner._fields.append(self)
+    # Flask-Login - https://flask-login.readthedocs.io/en/latest/#configuring-your-application
 
-        if not self._env:
-            return
+    # The name of the cookie to store the “remember me” information in
+    REMEMBER_COOKIE_NAME = 'remember_token'
+    # The amount of time before the cookie expires, as a datetime.timedelta object or integer seconds
+    REMEMBER_COOKIE_DURATION = timedelta(days=365)
+    # If the “Remember Me” cookie should cross domains, set the domain value here
+    # (i.e. .example.com would allow the cookie to be used on all subdomains of example.com)
+    REMEMBER_COOKIE_DOMAIN = None
+    # Limits the “Remember Me” cookie to a certain path
+    REMEMBER_COOKIE_PATH = '/'
+    # Restricts the “Remember Me” cookie’s scope to secure channels (typically HTTPS)
+    REMEMBER_COOKIE_SECURE = False
+    # Prevents the “Remember Me” cookie from being accessed by client-side scripts
+    REMEMBER_COOKIE_HTTPONLY = True
+    # If set to True the cookie is refreshed on every request,
+    # which bumps the lifetime. Works like Flask’s SESSION_REFRESH_EACH_REQUEST
+    REMEMBER_COOKIE_REFRESH_EACH_REQUEST = False
+    # Restricts the “Remember Me” cookie to first-party or same-site context
+    REMEMBER_COOKIE_SAMESITE = None
 
-        value = os.getenv(self._env_name) or self._default_value
-        if value is None:
-            raise Exception(f'Could not find environment variable {self._env_name}')
-
-        self.value = value
-
-    def __set__(self, obj: object, value: Any) -> None:  # noqa: ANN401, D105
-        raise RuntimeError('Cannot assign config value')
-
-    def __get__(self, obj: object, objtype: type['YabaConfig']) -> Any:  # noqa: ANN401, D105
-        if obj is None:
-            return self
-        return self.value
+    # Flask-SQLAlchemy
 
     @property
-    def name(self) -> str:
-        '''Get a config parameter name.'''
-        return self._name
-
-    @property
-    def value(self) -> Any:  # noqa: ANN401
-        '''Get a config parameter value.'''
-        return self._value
-
-    @value.setter
-    def value(self, value: Any) -> Any:  # noqa: ANN401
-        if self._cast:
-            self._value = self._cast(value)
-        self._value = value
-
-    @property
-    def is_secret(self) -> bool:
-        '''Get if parameter is secret.'''
-        return self._secret
-
-
-def validate_bool_field(value: str | None) -> bool:
-    '''Cast dotenv field to python bool type.'''
-    if value is None:
-        return False
-    if isinstance(value, bool):
-        return value
-    return str(value).lower() in ('true', '1')
-
-
-class YabaConfig:
-    '''
-    A yaba config object.
-
-    This object is passed to an app instance.
-    '''
-
-    _fields: list[ConfigField] = []
-
-    # Flask
-    FLASK_APP = ConfigField()
-    SECRET_KEY = ConfigField(secret=True)
-    PRESERVE_CONTEXT_ON_EXCEPTION = ConfigField(True, cast=validate_bool_field)
-    EXPLAIN_TEMPLATE_LOADING = ConfigField(False, cast=validate_bool_field)
-    FLASK_DEBUG = ConfigField(False, cast=validate_bool_field)
-
-    # Flask-Login
-    REMEMBER_COOKIE_SAMESITE = ConfigField('strict')
-    SESSION_COOKIE_SAMESITE = ConfigField('strict')
-
-    # Logging
-    LOGGING_LEVEL = ConfigField()
-
-    # Deployment
-    DEPLOY_SECRET_KEY = ConfigField(secret=True)
-
-    # Database
-    DB_DIALECT = ConfigField()
-    DB_DRIVER = ConfigField()
-    DB_USERNAME = ConfigField(secret=True)
-    DB_PASSWORD = ConfigField(secret=True)
-    DB_HOSTNAME = ConfigField(secret=True)
-    DB_NAME = ConfigField(secret=True)
-    SQLALCHEMY_DATABASE_URI = ConfigField(env=False, secret=True)
-
-    # Google OAuth
-    GOOGLE_CLIENT_ID = ConfigField(secret=True)
-    GOOGLE_CLIENT_SECRET = ConfigField(secret=True)
-
-    def __init__(self) -> None:
-        self.__class__.SQLALCHEMY_DATABASE_URI.value = (
+    def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa: N802, D102
+        return (
             f'{self.DB_DIALECT}'
             f'+{self.DB_DRIVER}'
             f'://{self.DB_USERNAME}'
@@ -132,21 +48,30 @@ class YabaConfig:
             f'/{self.DB_NAME}'
         )
 
-    def __str__(self) -> str:
-        '''
-        Get a string representation of config.
+    # Logging
 
-        Creates a string in format 'name1=value1, name2=value2, ...'
+    LOGGING_LEVEL = 'INFO'
 
-        If field is secret and app is not in debug mode,
-        it value is replaced with #SECRET# string
-        for purpose of security.
-        '''
-        fs = []
+    # Deployment
 
-        for field in self._fields:
-            value = repr(field.value) if self.FLASK_DEBUG or not field.is_secret else '#SECRET#'
-            fs.append(f'{field.name}={value} ({type(field.value)})')
+    DEPLOY_SECRET_KEY = 'git hub secret key'
 
-        fields_string = ', '.join(fs)
-        return f'{self.__class__.__name__}({fields_string})'
+    # Database
+
+    DB_DIALECT = 'mysql'
+    DB_DRIVER = 'pymysql'
+    DB_USERNAME = 'kirill'
+    DB_PASSWORD = 'kirill'
+    DB_HOSTNAME = '127.0.0.1'
+    DB_NAME = 'yaba'
+
+    # Google OAuth
+
+    GOOGLE_CLIENT_ID = 'google client id'
+    GOOGLE_CLIENT_SECRET = 'google client secret'
+
+
+class TestingConfig(Config):
+    '''A config object for testing.'''
+
+    TESING = True
