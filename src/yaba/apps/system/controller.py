@@ -2,6 +2,7 @@ import hashlib
 import hmac
 import os
 from typing import Any, Dict, Tuple, Union
+from flask import current_app
 
 import git
 
@@ -10,7 +11,7 @@ class SystemController:
     '''A controller for internal requests (web hooks, server health, etc.).'''
 
     def __init__(self) -> None:
-        self._deploy_secret_key = os.environ.get('DEPLOY_SECRET_KEY')
+        self._deploy_secret_key = current_app.config.get('DEPLOY_SECRET_KEY')
 
     def deploy_web_hook(self, x_hub_signature: str, data: bytes) -> Tuple[Union[Dict[Any, Any], str], int]:
         '''
@@ -28,7 +29,7 @@ class SystemController:
             return {'error': 'Update server: failed. Secret token is not configured'}, 500
 
         if not self._is_valid_signature(x_hub_signature, data):
-            return 'Invalid token, deploy aborted.', 404
+            return 'Invalid token, deploy aborted.', 403
 
         repo = git.Repo('.')
         origin = repo.remotes.origin
