@@ -37,16 +37,7 @@ class Config:
 
     # Flask-SQLAlchemy
 
-    @property
-    def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa: N802, D102
-        return (
-            f'{self.DB_DIALECT}'
-            f'+{self.DB_DRIVER}'
-            f'://{self.DB_USERNAME}'
-            f':{self.DB_PASSWORD}'
-            f'@{self.DB_HOSTNAME}'
-            f'/{self.DB_NAME}'
-        )
+    SQLALCHEMY_DATABASE_URI = None  # Updated in app factory
 
     # Logging
 

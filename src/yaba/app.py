@@ -30,6 +30,14 @@ def create_app() -> Flask:
 
     app.config.from_object(config)
     app.config.from_envvar('CONFIG_EXT', silent=True)
+    app.config['SQLALCHEMY_DATABASE_URI'] = (
+        f'{app.config["DB_DIALECT"]}'
+        f'+{app.config["DB_DRIVER"]}'
+        f'://{app.config["DB_USERNAME"]}'
+        f':{app.config["DB_PASSWORD"]}'
+        f'@{app.config["DB_HOSTNAME"]}'
+        f'/{app.config["DB_NAME"]}'
+    )
 
     db.init_app(app)
     app.logger.info(f'Models: {db.Model.__subclasses__()}')
