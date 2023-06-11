@@ -30,18 +30,18 @@ def create_app() -> Flask:
     configure_logger(app.config['LOGGING_LEVEL'])
 
     with app.app_context():
-        from yaba.apps.user.app import login_manager
+        from yaba.api.user.app import login_manager
 
-        from yaba.apps.budget import budget_app
+        from yaba.api.budget import budget_app
         app.register_blueprint(budget_app)
 
-        from yaba.apps.root import root_app
-        app.register_blueprint(root_app)
+        from yaba.frontend import frontend_app
+        app.register_blueprint(frontend_app)
 
-        from yaba.apps.system import system_app
+        from yaba.api.system import system_app
         app.register_blueprint(system_app)
 
-        from yaba.apps.user import user_app
+        from yaba.api.user import user_app
         app.register_blueprint(user_app)
 
         app.logger.info(f'Registered blueprints: {list(app.blueprints.keys())}')

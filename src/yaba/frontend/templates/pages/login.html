@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import 'macro.html' as m %}
+{% block page_title %} Login {% endblock %}
+
+{% block page_content %}
+{{ m.heading('Login') }}
+{{ m.show_flash() }}
+
+<div class="container px-5 my-5">
+    <form id="login-form" action="{{ url_for('frontend.login') }}" method="post">
+        {{ m.render_field(form.email) }}
+        {{ m.render_field(form.password) }}
+        {{ form.remember() }} {{ form.remember.label}}
+        <div class="d-grid mt-3">
+            {{ form.submit(class_='btn btn-primary btn-lg') }}
+        </div>
+        {{ form.hidden_tag() }}
+    </form>
+</div>
+
+{% endblock %}
+
+{% block page_scripts %}
+    <script>$("#login").addClass('active')</script>
+{% endblock %}
