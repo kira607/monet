@@ -1,3 +1,3 @@
-'''A system app package.'''
+"""A system app package."""
 
 from .app import system_app

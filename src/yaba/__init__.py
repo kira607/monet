@@ -1,3 +1,3 @@
-'''A yaba main package.'''
+"""A yaba main package."""
 
-__version__ = '0.0.0'
+__version__ = "0.0.0"

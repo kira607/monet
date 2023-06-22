@@ -1,4 +1,4 @@
-'''Yaba web apps package.'''
+"""Yaba web apps package."""
 
 from .budget import budget_app
 from .system import system_app

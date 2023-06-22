@@ -1,3 +1,3 @@
-'''Authentication app package.'''
+"""Authentication app package."""
 
 from .app import user_app

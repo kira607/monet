@@ -1,2 +1,2 @@
 class UserController:
-    '''An user app controller.'''
+    """An user app controller."""

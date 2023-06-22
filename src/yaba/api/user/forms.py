@@ -4,30 +4,34 @@ from wtforms.validators import DataRequired, Email, EqualTo, Length
 
 
 class UserRegistrationForm(FlaskForm):
-    '''A form for user registration.'''
+    """A form for user registration."""
 
-    name = StringField('Name', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email('Invalid Email')])
+    name = StringField("Name", validators=[DataRequired()])
+    email = StringField("Email", validators=[DataRequired(), Email("Invalid Email")])
     password = PasswordField(
-        'Password',
+        "Password",
         validators=[
             DataRequired(),
-            Length(min=8, max=50, message='Password length must be at least 8 and at most 50 characters'),
+            Length(
+                min=8,
+                max=50,
+                message="Password length must be at least 8 and at most 50 characters",
+            ),
         ],
     )
     password_confirmation = PasswordField(
-        'Password Confirmation',
+        "Password Confirmation",
         validators=[
-            EqualTo('password', 'Passwords dot not match'),
+            EqualTo("password", "Passwords dot not match"),
         ],
     )
-    submit = SubmitField("Let\'s go!")
+    submit = SubmitField("Let's go!")
 
 
 class UserLoginForm(FlaskForm):
-    '''A form for user login.'''
+    """A form for user login."""
 
-    email = StringField('Email', validators=[DataRequired(), Email('Invalid Email')])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember me', default=False)
-    submit = SubmitField('Login')
+    email = StringField("Email", validators=[DataRequired(), Email("Invalid Email")])
+    password = PasswordField("Password", validators=[DataRequired()])
+    remember = BooleanField("Remember me", default=False)
+    submit = SubmitField("Login")

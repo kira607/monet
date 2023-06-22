@@ -1,6 +1,4 @@
-
-
 class RootController:
-    '''An root app controller.'''
+    """An root app controller."""
 
     pass

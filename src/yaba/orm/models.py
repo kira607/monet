@@ -9,30 +9,29 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from yaba.orm import db
 
-
 __all__ = [
-    'User',
-    'UserEvent',
-    'UserEventType',
-    'Role',
+    "User",
+    "UserEvent",
+    "UserEventType",
+    "Role",
 ]
 
 
 class RolesUsers(db.Model):
-    '''A secondary table for establishing many-to-many relationship between users and roles.'''
+    """A secondary table for establishing many-to-many relationship between users and roles."""
 
-    __tablename__ = 'roles_users'
+    __tablename__ = "roles_users"
 
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
 
-    user_id = db.Column('user_id', db.Integer(), db.ForeignKey('user.id'))
-    role_id = db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
+    user_id = db.Column("user_id", db.Integer(), db.ForeignKey("user.id"))
+    role_id = db.Column("role_id", db.Integer(), db.ForeignKey("role.id"))
 
 
 class Role(db.Model):
-    '''A user role.'''
+    """A user role."""
 
-    __tablename__ = 'role'
+    __tablename__ = "role"
 
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
 
@@ -41,9 +40,9 @@ class Role(db.Model):
 
 
 class User(db.Model, UserMixin):
-    '''A user.'''
+    """A user."""
 
-    __tablename__ = 'user'
+    __tablename__ = "user"
 
     # Just PK
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
@@ -56,32 +55,32 @@ class User(db.Model, UserMixin):
     name: Mapped[str] = mapped_column(db.String(50), nullable=True)
 
     # Stuff
-    events: Mapped[list['UserEvent']] = db.relationship(back_populates='user')
+    events: Mapped[list["UserEvent"]] = db.relationship(back_populates="user")
     roles = db.relationship(
-        'Role',
-        secondary='roles_users',
-        backref=db.backref('users', lazy='dynamic'),
+        "Role",
+        secondary="roles_users",
+        backref=db.backref("users", lazy="dynamic"),
     )
 
     def __repr__(self) -> str:
-        '''Get a class repr.'''
-        return f'User(id={self.id!r}, email={self.email!r})'
+        """Get a class repr."""
+        return f"User(id={self.id!r}, email={self.email!r})"
 
 
 class UserEventType(Enum):
-    '''A user event.'''
+    """A user event."""
 
-    REGISTER = 'register'
-    LOGIN = 'login'
-    LOG_OUT = 'log out'
-    PASSWORD_CHANGE = 'password_change'
-    EDIT = 'edit'
+    REGISTER = "register"
+    LOGIN = "login"
+    LOG_OUT = "log out"
+    PASSWORD_CHANGE = "password_change"
+    EDIT = "edit"
 
 
 class UserEvent(db.Model):
-    '''Events happened to user account.'''
+    """Events happened to user account."""
 
-    __tablename__ = 'user_event'
+    __tablename__ = "user_event"
 
     # Just PK
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
@@ -95,5 +94,5 @@ class UserEvent(db.Model):
     password: Mapped[str | None] = mapped_column(db.String(255))
 
     # Stuff
-    user_id: Mapped[int] = mapped_column(db.ForeignKey('user.id'))
-    user: Mapped['User'] = db.relationship(back_populates='events')
+    user_id: Mapped[int] = mapped_column(db.ForeignKey("user.id"))
+    user: Mapped["User"] = db.relationship(back_populates="events")

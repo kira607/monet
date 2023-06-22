@@ -1,45 +1,34 @@
-# yaba
+Monet
+=====
 
-![Tests](https://github.com/kira607/yaba/actions/workflows/tests.yaml/badge.svg)
+[![Tests](https://github.com/kira607/yaba/actions/workflows/tests.yaml/badge.svg)]()
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 A web app for planning, analysis, and visualization of the personal and company budget.
 
-## Linting and Testing
+---
 
-From the repo root run:
+# Dependencies
 
-1. This command to run mypy accorss sources and tests
+- python 3.10
+- pip
+- VSCode
+
+# Start working on Monet
+
+1. Create a python virtual environment and source to it:
+
     ```bash
-    mypy src
-    ```
-2. This command to run tests:
-    ```bash
-    pytest
-    ```
-3. This command to run flake8 linter:
-    ```bash
-    flake8 src tests
-    ```
-4. This command to sort imports
-    ```bash
-    isort src tests
-    ```
-5. This command to run tox:
-    ```bash
-    tox
+    python -m venv .venv
+    source .venv/bin/activate  # Linux
+    # or
+    .venv\Scripts\activate  # Windows
     ```
 
-## Migrations
+2. Install package in editable mode:
 
-If db models are changed do following:
+    ```bash
+    pip install -e .
+    ```
 
-1. Create new version:
-    ```bash
-    flask db migrate -m "Migration message."
-    ```
-2. Check generated script (`migrations/version/<new_file>`)
-3. Upgrade local database.
-    ```bash
-    flask db upgrade
-    ```
-4. After deployment upgrade prod database.
+> _That's it! Good to go!_
