@@ -129,9 +129,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# Other staff
+# Other stuff
 .idea/
 notes.txt
-.env.*
 sandbox.py
 google_oauth.json
