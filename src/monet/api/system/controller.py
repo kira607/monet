@@ -13,7 +13,9 @@ class SystemController:
         self._deploy_secret_key = current_app.config.get("DEPLOY_SECRET_KEY")
 
     def deploy_web_hook(
-        self, x_hub_signature: str, data: bytes
+        self,
+        x_hub_signature: str,
+        data: bytes,
     ) -> Tuple[Union[Dict[Any, Any], str], int]:
         """
         Process a web hook from github.
@@ -28,7 +30,7 @@ class SystemController:
         """
         if self._deploy_secret_key is None:
             return {
-                "error": "Update server: failed. Secret token is not configured"
+                "error": "Update server: failed. Secret token is not configured",
             }, 500
 
         if not self._is_valid_signature(x_hub_signature, data):

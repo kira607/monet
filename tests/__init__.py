@@ -1,1 +1,1 @@
-'''A tests package for yaba.'''
+"""A tests package for monet."""

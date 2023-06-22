@@ -10,7 +10,7 @@
             "request": "launch",
             "module": "flask",
             "env": {
-                "FLASK_APP": "src/yaba.app:create_app()",
+                "FLASK_APP": "src/monet.app:create_app('dev')",
                 "FLASK_DEBUG": "1"
             },
             "args": ["run", "--no-debugger", "--no-reload"],

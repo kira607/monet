@@ -1,18 +1,46 @@
+"""Config settings for for development, testing and production environments."""
+import os
 from datetime import timedelta
+from typing import Literal
 
 
 class Config:
-    """A base configuration class."""
+    """Base configuration."""
 
     # Flask - https://flask.palletsprojects.com/en/2.3.x/config/
 
-    FLASK_APP = "src/yaba.app:create_app()"
-    SECRET_KEY = "a secret key"
-    PRESERVE_CONTEXT_ON_EXCEPTION = True
+    FLASK_APP = "src/monet.app:create_app()"
+    SECRET_KEY = os.getenv("SECRET_KEY", "Hello there! General Kenobi!")
+    PRESERVE_CONTEXT_ON_EXCEPTION: bool | None = True
     EXPLAIN_TEMPLATE_LOADING = False
     SESSION_COOKIE_SAMESITE = "Lax"
-    TESING = False
-    DEBUG = True
+
+    TESTING = False
+    DEBUG = False
+
+    # Auth & stuff
+
+    BCRYPT_LOG_ROUNDS = 4
+    TOKEN_EXPIRE_HOURS = 0
+    TOKEN_EXPIRE_MINUTES = 0
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SWAGGER_UI_DOC_EXPANSION = "list"
+    RESTX_MASK_SWAGGER = False
+    JSON_SORT_KEYS = False
+
+    # Flask-SQLAlchemy
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa: N802
+        """Get a database uri."""
+        return (
+            f"{self.DB_DIALECT}"
+            f"+{self.DB_DRIVER}"
+            f"://{self.DB_USERNAME}"
+            f":{self.DB_PASSWORD}"
+            f"@{self.DB_HOSTNAME}"
+            f"/{self.DB_NAME}"
+        )
 
     # Flask-Login - https://flask-login.readthedocs.io/en/latest/#configuring-your-application
 
@@ -35,34 +63,53 @@ class Config:
     # Restricts the “Remember Me” cookie to first-party or same-site context
     REMEMBER_COOKIE_SAMESITE = None
 
-    # Flask-SQLAlchemy
-
-    SQLALCHEMY_DATABASE_URI = None  # Updated in app factory
-
     # Logging
 
-    LOGGING_LEVEL = "INFO"
-
-    # Deployment
-
-    DEPLOY_SECRET_KEY = "git hub secret key"
+    LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", "INFO")
 
     # Database
 
-    DB_DIALECT = "mysql"
-    DB_DRIVER = "pymysql"
-    DB_USERNAME = "kirill"
-    DB_PASSWORD = "kirill"
-    DB_HOSTNAME = "127.0.0.1"
-    DB_NAME = "yaba"
+    DB_DIALECT = os.getenv("DB_DIALECT", "mysql")
+    DB_DRIVER = os.getenv("DB_DRIVER", "pymysql")
+    DB_USERNAME = os.getenv("DB_USERNAME", "kirill")
+    DB_PASSWORD = os.getenv("DB_PASSWORD", "kirill")
+    DB_HOSTNAME = os.getenv("DB_HOSTNAME", "127.0.0.1")
+    DB_NAME = os.getenv("DB_NAME", "monet_dev")
 
     # Google OAuth
 
-    GOOGLE_CLIENT_ID = "google client id"
-    GOOGLE_CLIENT_SECRET = "google client secret"
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "google client id")
+    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "google client secret")
+
+
+class DevelopmentConfig(Config):
+    """Development configuration."""
+
+    TOKEN_EXPIRE_MINUTES = 15
+    DEBUG = True
 
 
 class TestingConfig(Config):
-    """A config object for testing."""
+    """Testing configuration."""
 
-    TESING = True
+    TESTING = True
+
+
+class ProductionConfig(Config):
+    """Production configuration."""
+
+    TOKEN_EXPIRE_HOURS = 1
+    BCRYPT_LOG_ROUNDS = 13
+    PRESERVE_CONTEXT_ON_EXCEPTION = None
+
+
+_ENV_CONFIG_DICT = {
+    "dev": DevelopmentConfig,
+    "test": TestingConfig,
+    "prod": ProductionConfig,
+}
+
+
+def get_config(config_name: Literal["dev", "test", "prod"]) -> Config:
+    """Retrieve environment configuration settings."""
+    return _ENV_CONFIG_DICT.get(config_name, ProductionConfig)()

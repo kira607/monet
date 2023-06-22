@@ -1,5 +1,3 @@
-
-
 def test_dummy() -> None:
-    '''Test dummy.'''
+    """Test dummy."""
     assert True is True

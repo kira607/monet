@@ -63,7 +63,8 @@ def register() -> Response | str:
             new_user.name = form.name.data
             new_user.email = form.email.data
             new_user.password = bcrypt.hashpw(
-                form.password.data.encode("utf-8"), bcrypt.gensalt()
+                form.password.data.encode("utf-8"),
+                bcrypt.gensalt(),
             )
 
             reg_event = UserEvent()
@@ -106,7 +107,8 @@ def login() -> Response | str:
             return render_template("login.html", form=form)
 
         if not bcrypt.checkpw(
-            form.password.data.encode("utf-8"), user.password.encode("utf-8")
+            form.password.data.encode("utf-8"),
+            user.password.encode("utf-8"),
         ):
             flash("Wrong password", "danger")
             return render_template("login.html", form=form)

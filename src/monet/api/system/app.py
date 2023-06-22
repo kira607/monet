@@ -16,7 +16,7 @@ controller = SystemController()
 def deploy_web_hook() -> Response:
     """Trigger a web hook to pull repo code."""
     current_app.logger.critical(
-        "Deploy request recieved. If it's valid, app will restart"
+        "Deploy request recieved. If it's valid, app will restart",
     )
     x_hub_sig = request.headers.get("X-Hub-Signature")
     data = request.data

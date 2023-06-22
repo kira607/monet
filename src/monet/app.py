@@ -2,12 +2,12 @@ from flask import Flask
 from flask_bootstrap import Bootstrap
 
 from monet.admin import admin
-from monet.config import Config
+from monet.config import ConfigName, get_config
 from monet.logger import configure_logger
 from monet.orm import db, migrate
 
 
-def create_app() -> Flask:
+def create_app(environment_name: ConfigName) -> Flask:
     """
     Create a new flask app.
 
@@ -15,17 +15,8 @@ def create_app() -> Flask:
     """
     app = Flask(__name__)
 
-    config = Config()
+    config = get_config(environment_name)
     app.config.from_object(config)
-    app.config.from_envvar("CONFIG_EXT", silent=True)
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        f'{app.config["DB_DIALECT"]}'
-        f'+{app.config["DB_DRIVER"]}'
-        f'://{app.config["DB_USERNAME"]}'
-        f':{app.config["DB_PASSWORD"]}'
-        f'@{app.config["DB_HOSTNAME"]}'
-        f'/{app.config["DB_NAME"]}'
-    )
 
     configure_logger(app.config["LOGGING_LEVEL"])
 
@@ -61,7 +52,7 @@ def create_app() -> Flask:
 
 def main() -> None:
     """Run entry point."""
-    app = create_app()
+    app = create_app("development")
     app.run(debug=True)
 
 
