@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_bootstrap import Bootstrap
 
-from yaba.admin import admin
-from yaba.config import Config
-from yaba.logger import configure_logger
-from yaba.orm import db, migrate
+from monet.admin import admin
+from monet.config import Config
+from monet.logger import configure_logger
+from monet.orm import db, migrate
 
 
 def create_app() -> Flask:
@@ -30,20 +30,20 @@ def create_app() -> Flask:
     configure_logger(app.config["LOGGING_LEVEL"])
 
     with app.app_context():
-        from yaba.api.budget import budget_app
-        from yaba.api.user.app import login_manager
+        from monet.api.budget import budget_app
+        from monet.api.user.app import login_manager
 
         app.register_blueprint(budget_app)
 
-        from yaba.frontend import frontend_app
+        from monet.frontend import frontend_app
 
         app.register_blueprint(frontend_app)
 
-        from yaba.api.system import system_app
+        from monet.api.system import system_app
 
         app.register_blueprint(system_app)
 
-        from yaba.api.user import user_app
+        from monet.api.user import user_app
 
         app.register_blueprint(user_app)
 

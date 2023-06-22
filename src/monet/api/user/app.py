@@ -11,9 +11,9 @@ from flask_login import (
 )
 from werkzeug import Response
 
-from yaba.logger import logger
-from yaba.orm import db
-from yaba.orm.models import User, UserEvent, UserEventType
+from monet.logger import logger
+from monet.orm import db
+from monet.orm.models import User, UserEvent, UserEventType
 
 from .controller import UserController
 from .forms import UserLoginForm, UserRegistrationForm

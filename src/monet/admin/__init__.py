@@ -3,7 +3,7 @@
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
-from yaba.orm import db
+from monet.orm import db
 
 admin = Admin()
 

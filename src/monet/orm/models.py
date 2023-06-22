@@ -7,7 +7,7 @@ from flask_login import UserMixin
 from sqlalchemy import func
 from sqlalchemy.orm import Mapped, mapped_column
 
-from yaba.orm import db
+from monet.orm import db
 
 __all__ = [
     "User",

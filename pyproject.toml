@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 addopts = [
-    "--cov=yaba",
+    "--cov=monet",
     # generate report with details of all (non-pass) test results
     "-ra",
     # show local variables in tracebacks
