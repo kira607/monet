@@ -15,6 +15,7 @@ Werkzeug==2.2.3
 alembic==1.10.2
 python-dotenv==1.0.0
 email-validator==2.0.0.post2
+flask-restx==1.1.0
 
 # =================================
 # google sheets requirements

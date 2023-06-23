@@ -25,7 +25,7 @@ class Result:
         self,
         success: bool,
         value: Any,
-        error: str | None,  # noqa: ANN401
+        error: str | None,
     ) -> None:
         """Represent the outcome of an operation."""
         self.success = success
@@ -53,8 +53,8 @@ class Result:
         self,
         func: Callable[..., Any],
         *args: Any,
-        **kwargs: Any,  # noqa: ANN401
-    ) -> Any:  # noqa: ANN401
+        **kwargs: Any,
+    ) -> Any:
         """Pass result of successful operation (if any) to subsequent function."""
         if self.failure:
             return self
@@ -66,8 +66,8 @@ class Result:
         self,
         func: Callable[..., Any],
         *args: Any,
-        **kwargs: Any,  # noqa: ANN401
-    ) -> Any:  # noqa: ANN401
+        **kwargs: Any,
+    ) -> Any:
         """Pass error message from failed operation to subsequent function."""
         if self.success:
             return self.value if self.value else None
@@ -79,8 +79,8 @@ class Result:
         self,
         func: Callable[..., Any],
         *args: Any,
-        **kwargs: Any,  # noqa: ANN401
-    ) -> Any:  # noqa: ANN401
+        **kwargs: Any,
+    ) -> Any:
         """Pass result (either succeeded/failed) to subsequent function."""
         if self.value:
             return func(self.value, *args, **kwargs)
@@ -92,7 +92,7 @@ class Result:
         return Result(False, value=None, error=error_message)
 
     @staticmethod
-    def ok(value: Any = None) -> "Result":  # noqa: ANN401
+    def ok(value: Any = None) -> "Result":
         """Create a Result object for a successful operation."""
         return Result(True, value=value, error=None)
 
