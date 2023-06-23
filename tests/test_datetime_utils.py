@@ -4,10 +4,7 @@ from monet.utils.datetime_utils import Timespan
 
 
 @pytest.mark.parametrize(
-    "kwargs,"
-    "expected_total_seconds,"
-    "expected_total_milliseconds,"
-    "expected_total_microseconds,",
+    "kwargs," "expected_total_seconds," "expected_total_milliseconds," "expected_total_microseconds,",
     (
         (
             {

@@ -33,9 +33,7 @@ class Timespan:
         self._total_seconds = self.seconds + (self.days * ONE_DAY_IN_SECONDS)
         self._total_milliseconds = self.total_seconds * 1000 + self.milliseconds
         self._total_microseconds = (
-            self.total_seconds * 1000 * 1000
-            + self.milliseconds * 1000
-            + self.microseconds
+            self.total_seconds * 1000 * 1000 + self.milliseconds * 1000 + self.microseconds
         )
 
     @property
@@ -99,10 +97,7 @@ class Timespan:
         """Format a :class:`Timespan` as a string resembling a digital display."""
         if self.days:
             day_or_days = "days" if self.days > 1 else "day"
-            return (
-                f"{self.days} {day_or_days}, "
-                f"{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}"
-            )
+            return f"{self.days} {day_or_days}, " f"{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}"
         if self.seconds:
             return f"{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}"
         return f"00:00:00.{self.total_microseconds}"

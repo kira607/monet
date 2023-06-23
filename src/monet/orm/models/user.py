@@ -22,9 +22,7 @@ class User(db.Model, UserMixin):
     email: Mapped[str] = mapped_column(db.String(80), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
     name: Mapped[str] = mapped_column(db.String(50), nullable=True)
-    events: Mapped[list["UserEvent"]] = db.relationship(  # noqa: F821
-        back_populates="user"
-    )
+    events: Mapped[list["UserEvent"]] = db.relationship(back_populates="user")  # noqa: F821
     roles = db.relationship(
         "Role",
         secondary="roles_users",
