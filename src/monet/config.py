@@ -3,6 +3,9 @@ import os
 from datetime import timedelta
 from typing import Literal
 
+ConfigName = Literal["dev", "test", "prod"]
+DEFAULT_SECRET = "Hello there! General Kenobi!"
+
 
 class Config:
     """Base configuration."""
@@ -10,7 +13,7 @@ class Config:
     # Flask - https://flask.palletsprojects.com/en/2.3.x/config/
 
     FLASK_APP = "src/monet.app:create_app()"
-    SECRET_KEY = os.getenv("SECRET_KEY", "Hello there! General Kenobi!")
+    SECRET_KEY = os.getenv("SECRET_KEY", DEFAULT_SECRET)
     PRESERVE_CONTEXT_ON_EXCEPTION: bool | None = True
     EXPLAIN_TEMPLATE_LOADING = False
     SESSION_COOKIE_SAMESITE = "Lax"
@@ -67,6 +70,10 @@ class Config:
 
     LOGGING_LEVEL = os.getenv("LOGGING_LEVEL", "INFO")
 
+    # Deployment
+
+    DEPLOY_SECRET_KEY = os.getenv("DEPLOY_SECRET_KEY", DEFAULT_SECRET)
+
     # Database
 
     DB_DIALECT = os.getenv("DB_DIALECT", "mysql")
@@ -78,8 +85,8 @@ class Config:
 
     # Google OAuth
 
-    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "google client id")
-    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "google client secret")
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", DEFAULT_SECRET)
+    GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", DEFAULT_SECRET)
 
 
 class DevelopmentConfig(Config):
@@ -110,6 +117,6 @@ _ENV_CONFIG_DICT = {
 }
 
 
-def get_config(config_name: Literal["dev", "test", "prod"]) -> Config:
+def get_config(config_name: ConfigName) -> Config:
     """Retrieve environment configuration settings."""
     return _ENV_CONFIG_DICT.get(config_name, ProductionConfig)()

@@ -52,7 +52,7 @@ def create_app(environment_name: ConfigName) -> Flask:
 
 def main() -> None:
     """Run entry point."""
-    app = create_app("development")
+    app = create_app("dev")
     app.run(debug=True)
 
 

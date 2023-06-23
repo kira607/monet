@@ -22,8 +22,11 @@ class Result:
     """
 
     def __init__(
-        self, success: bool, value: Any, error: str | None
-    ) -> None:  # noqa: ANN401
+        self,
+        success: bool,
+        value: Any,
+        error: str | None,  # noqa: ANN401
+    ) -> None:
         """Represent the outcome of an operation."""
         self.success = success
         self.error = error
@@ -47,7 +50,10 @@ class Result:
         return not self.success
 
     def on_success(
-        self, func: Callable[..., Any], *args: Any, **kwargs: Any
+        self,
+        func: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any,  # noqa: ANN401
     ) -> Any:  # noqa: ANN401
         """Pass result of successful operation (if any) to subsequent function."""
         if self.failure:
@@ -57,7 +63,10 @@ class Result:
         return func(*args, **kwargs)
 
     def on_failure(
-        self, func: Callable[..., Any], *args: Any, **kwargs: Any
+        self,
+        func: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any,  # noqa: ANN401
     ) -> Any:  # noqa: ANN401
         """Pass error message from failed operation to subsequent function."""
         if self.success:
@@ -67,7 +76,10 @@ class Result:
         return func(*args, **kwargs)
 
     def on_both(
-        self, func: Callable[..., Any], *args: Any, **kwargs: Any
+        self,
+        func: Callable[..., Any],
+        *args: Any,
+        **kwargs: Any,  # noqa: ANN401
     ) -> Any:  # noqa: ANN401
         """Pass result (either succeeded/failed) to subsequent function."""
         if self.value:
