@@ -25,6 +25,7 @@ def test_get_user(client: FlaskClient, db: SQLAlchemy) -> None:
     response = get_user(client, access_token)
     assert response.status_code == HTTPStatus.OK
     assert "email" in response.json and response.json["email"] == EMAIL
+    assert response.json.get("id") is not None
 
 
 def test_get_user_no_token(client: FlaskClient, db: SQLAlchemy) -> None:
