@@ -1,9 +1,11 @@
-# pytest stuff
+# testing
 pytest
 pytest-mock
 pytest-cov
+pytest-flask
+pytest-dotenv
 
-# flake8 stuff
+# linting
 flake8
 flake8-annotations
 flake8-broken-line
@@ -24,8 +26,17 @@ flake8-return
 flake8-simplify
 flake8-use-fstring
 
-# other
+# formatting
+black
 isort
+
+# mypy and stubs
+mypy
+sqlalchemy[mypy]
+types-Flask
+types-Flask-Migrate
+
+# other
 pep8-naming
-tox==4.4.7
-mypy==1.1.1
+tox
+pre-commit
