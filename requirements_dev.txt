@@ -2,6 +2,8 @@
 pytest
 pytest-mock
 pytest-cov
+pytest-flask
+pytest-dotenv
 
 # linting
 flake8
@@ -25,11 +27,16 @@ flake8-simplify
 flake8-use-fstring
 
 # formatting
-black==23.3.0
+black
 isort
+
+# mypy and stubs
+mypy
+sqlalchemy[mypy]
+types-Flask
+types-Flask-Migrate
 
 # other
 pep8-naming
-tox==4.4.7
-mypy==1.1.1
+tox
 pre-commit

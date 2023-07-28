@@ -9,10 +9,6 @@ addopts = [
     "-ra",
     # show local variables in tracebacks
     "--showlocals",
-    # report formatting changes suggested by black
-    # "--black",
-    # report linting issues with flake8
-    # "--flake8",
     # verbose output
     "--verbose",
 ]
@@ -28,7 +24,7 @@ testpaths = [
 ]
 
 [tool.black]
-line-length = 110
+line-length = 120
 target-version = ['py310']
 include = '\.pyi?$'
 exclude =  '''
@@ -54,14 +50,41 @@ profile = "black"
 
 [tool.mypy]
 mypy_path = "src"
-check_untyped_defs = true
-disallow_any_decorated = false
-disallow_any_generics = true
-disallow_any_unimported = false
-disallow_subclassing_any = false
-disallow_untyped_calls = true
-disallow_untyped_defs = true
-ignore_missing_imports = true
+plugins = "sqlalchemy.ext.mypy.plugin"
+
+# Start off with these
+warn_unused_configs = true
+warn_redundant_casts = true
 warn_unused_ignores = true
-warn_return_any = false
-disable_error_code = "attr-defined"
+
+# Getting these passing should be easy
+strict_equality = true
+strict_concatenate = true
+
+# Strongly recommend enabling this one as soon as you can
+check_untyped_defs = true
+
+# These shouldn't be too much additional work, but may be tricky to
+# get passing if you use a lot of untyped libraries
+# disallow_subclassing_any = true
+# disallow_untyped_decorators = true
+# disallow_any_generics = true
+
+# These next few are various gradations of forcing use of type annotations
+disallow_untyped_calls = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+
+# This one isn't too hard to get passing, but return on investment is lower
+no_implicit_reexport = true
+
+# This one can be tricky to get passing if you use a lot of untyped libraries
+# warn_return_any = true
+
+[[tool.mypy.overrides]]
+module = "flask_admin.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "flask_restx.*"
+ignore_missing_imports = true

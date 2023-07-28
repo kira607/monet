@@ -1,21 +1,21 @@
-flask>=2.2.5
-flask-admin==1.6.1
+flask
+flask-admin
 Flask-Migrate
 Flask-SQLAlchemy
-flask-login
 pymysql
-gitpython==3.1.31
+gitpython
 Flask-WTF
 flask-bootstrap
 bcrypt
-marshmallow~=3.19.0
-cryptography>=38.0.0,<40
-SQLAlchemy==2.0.7
-Werkzeug==2.2.3
-alembic==1.10.2
-python-dotenv==1.0.0
-email-validator==2.0.0.post2
-flask-restx==1.1.0
+marshmallow
+cryptography
+SQLAlchemy
+Werkzeug
+alembic
+python-dotenv
+email-validator
+flask-restx
+flask-jwt-extended
 
 # =================================
 # google sheets requirements
