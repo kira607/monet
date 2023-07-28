@@ -5,17 +5,38 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Monet - run",
+            "name": "Monet - tests",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["-ra", "--cov=monet", "--showlocals", "--verbose"],
+            "env": {
+                "FLASK_APP": "src/monet.app:create_app('testing')",
+            }
+        },
+        {
+            "name": "Monet - dev run",
             "type": "python",
             "request": "launch",
             "module": "flask",
-            "env": {
-                "FLASK_APP": "src/monet.app:create_app('dev')",
-                "FLASK_DEBUG": "1"
-            },
             "args": ["run", "--no-debugger", "--no-reload"],
             "jinja": true,
-            "justMyCode": false
+            "justMyCode": false,
+            "env": {
+                "FLASK_APP": "src/monet.app:create_app('development')",
+            }
+        },
+        {
+            "name": "Monet - prod run",
+            "type": "python",
+            "request": "launch",
+            "module": "flask",
+            "args": ["run", "--no-debugger", "--no-reload"],
+            "jinja": true,
+            "justMyCode": false,
+            "env": {
+                "FLASK_APP": "src/monet.app:create_app('production')",
+            }
         }
     ]
 }

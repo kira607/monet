@@ -1,4 +1,16 @@
 {
     "python.analysis.typeCheckingMode": "off",
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter"
+    },
+    "flake8.args": [
+        "--config=setup.cfg",
+    ],
+    "autoDocstring.customTemplatePath": ".vscode/.mustache",
+    "mypy-type-checker.args": [
+        "--config-file=pyproject.toml",
+    ],
 }
