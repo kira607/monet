@@ -1,5 +1,3 @@
-"""Yaba web apps package."""
+"""APIs package."""
 
-from .budget import budget_app
-from .system import system_app
-from .user import user_app
+from .api import api_blueprint as api_blueprint

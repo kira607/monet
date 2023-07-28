@@ -5,13 +5,16 @@ repos:
     rev: 23.3.0
     hooks:
       - id: black
+        args: ["src", "tests"]
         language_version: python3.10
   - repo: https://github.com/pycqa/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        args: ["--profile", "black", "--filter-files"]
+        args: [--profile, black, --filter-files]
   - repo: https://github.com/pycqa/flake8
-    rev: '6.0.0'  # pick a git hash / tag to point to
+    rev: '6.0.0'
     hooks:
-    - id: flake8
+      - id: flake8
+        args: [--config=setup.cfg, src, tests]
+        exclude: migrations/*

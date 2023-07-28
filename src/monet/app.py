@@ -1,8 +1,8 @@
 from flask import Flask
-from flask_bootstrap import Bootstrap
 
 from monet.admin import admin
 from monet.config import ConfigName, get_config
+from monet.jwt import jwt
 from monet.logger import configure_logger
 from monet.orm import db, migrate
 
@@ -19,42 +19,19 @@ def create_app(environment_name: ConfigName) -> Flask:
     app.config.from_object(config)
 
     configure_logger(app.config["LOGGING_LEVEL"])
+    app.logger.info(f"Configured app for '{environment_name}'")
 
     with app.app_context():
-        from monet.api.budget import budget_app
-        from monet.api.user.app import login_manager
+        from monet.api import api_blueprint
 
-        app.register_blueprint(budget_app)
+        app.register_blueprint(api_blueprint)
 
-        from monet.frontend import frontend_app
-
-        app.register_blueprint(frontend_app)
-
-        from monet.api.system import system_app
-
-        app.register_blueprint(system_app)
-
-        from monet.api.user import user_app
-
-        app.register_blueprint(user_app)
-
-        app.logger.info(f"Registered blueprints: {list(app.blueprints.keys())}")
+    app.logger.info(f"Registered blueprints: {list(app.blueprints.keys())}")
 
     db.init_app(app)
     app.logger.info(f"Models: {db.Model.__subclasses__()}")
     migrate.init_app(app, db)
-    login_manager.init_app(app)
     admin.init_app(app)
-    Bootstrap(app)
+    jwt.init_app(app)
 
     return app
-
-
-def main() -> None:
-    """Run entry point."""
-    app = create_app("dev")
-    app.run(debug=True)
-
-
-if __name__ == "__main__":
-    main()

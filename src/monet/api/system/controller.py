@@ -36,7 +36,7 @@ class SystemController:
         if not self._is_valid_signature(x_hub_signature, data):
             return "Invalid token, deploy aborted.", 403
 
-        repo = git.Repo(".")
+        repo = git.Repo(".")  # type: ignore [attr-defined]
         origin = repo.remotes.origin
         origin.pull()
 

@@ -32,9 +32,7 @@ class Timespan:
         (self.hours, self.minutes) = divmod(self.minutes, 60)
         self._total_seconds = self.seconds + (self.days * ONE_DAY_IN_SECONDS)
         self._total_milliseconds = self.total_seconds * 1000 + self.milliseconds
-        self._total_microseconds = (
-            self.total_seconds * 1000 * 1000 + self.milliseconds * 1000 + self.microseconds
-        )
+        self._total_microseconds = self.total_seconds * 1000 * 1000 + self.milliseconds * 1000 + self.microseconds
 
     @property
     def total_seconds(self) -> int:

@@ -1,33 +1,30 @@
-# mypy: disable-error-code="name-defined,no-redef"
+# mypy: disable-error-code="name-defined,no-redef,assignment"
 
-import uuid
+import typing
 
-from flask_login import UserMixin
 from sqlalchemy.orm import Mapped, mapped_column
 
 from monet.orm import db
 
+if typing.TYPE_CHECKING:
+    from monet.orm.models import Role, UserEvent
 
-class User(db.Model, UserMixin):
+
+class User(db.Model):
     """A user."""
 
     __tablename__ = "user"
 
     id: Mapped[int] = mapped_column(primary_key=True)  # noqa: A003
-    public_id: Mapped[str] = mapped_column(
-        db.String(36),
-        unique=True,
-        default=lambda: str(uuid.uuid4()),
-    )
+
     email: Mapped[str] = mapped_column(db.String(80), nullable=False, unique=True)
     password: Mapped[str] = mapped_column(db.String(255), nullable=False)
-    name: Mapped[str] = mapped_column(db.String(50), nullable=True)
+
+    fisrt_name: Mapped[str | None] = mapped_column(db.String(50))
+    last_name: Mapped[str | None] = mapped_column(db.String(50))
+
     events: Mapped[list["UserEvent"]] = db.relationship(back_populates="user")  # noqa: F821
-    roles = db.relationship(
-        "Role",
-        secondary="roles_users",
-        backref=db.backref("users", lazy="dynamic"),
-    )
+    roles: Mapped[list["Role"]] = db.relationship(secondary="user_has_role", back_populates="users")
 
     def __repr__(self) -> str:
         """Get a class repr."""

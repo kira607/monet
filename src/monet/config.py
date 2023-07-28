@@ -3,8 +3,10 @@ import os
 from datetime import timedelta
 from typing import Literal
 
-ConfigName = Literal["dev", "test", "prod"]
-DEFAULT_SECRET = "Hello there! General Kenobi!"
+ConfigName = Literal["development", "testing", "production"]
+DEFAULT_SECRET: str = "Hello there! General Kenobi!"
+DEFAULT_TOKEN_EXPIRE_HOURS: int = 24 * 7
+DEFAULT_TOKEN_EXPIRE_MINUTES: int = 0
 
 
 class Config:
@@ -12,7 +14,6 @@ class Config:
 
     # Flask - https://flask.palletsprojects.com/en/2.3.x/config/
 
-    FLASK_APP = "src/monet.app:create_app()"
     SECRET_KEY = os.getenv("SECRET_KEY", DEFAULT_SECRET)
     PRESERVE_CONTEXT_ON_EXCEPTION: bool | None = True
     EXPLAIN_TEMPLATE_LOADING = False
@@ -26,12 +27,18 @@ class Config:
     BCRYPT_LOG_ROUNDS = 4
     TOKEN_EXPIRE_HOURS = 0
     TOKEN_EXPIRE_MINUTES = 0
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
     SWAGGER_UI_DOC_EXPANSION = "list"
     RESTX_MASK_SWAGGER = False
     JSON_SORT_KEYS = False
 
+    # flask-jwt-extended
+
+    JWT_ERROR_MESSAGE_KEY = "message"
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta()
+
     # Flask-SQLAlchemy
+
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     @property
     def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa: N802
@@ -44,27 +51,6 @@ class Config:
             f"@{self.DB_HOSTNAME}"
             f"/{self.DB_NAME}"
         )
-
-    # Flask-Login - https://flask-login.readthedocs.io/en/latest/#configuring-your-application
-
-    # The name of the cookie to store the “remember me” information in
-    REMEMBER_COOKIE_NAME = "remember_token"
-    # The amount of time before the cookie expires, as a datetime.timedelta object or integer seconds
-    REMEMBER_COOKIE_DURATION = timedelta(days=365)
-    # If the “Remember Me” cookie should cross domains, set the domain value here
-    # (i.e. .example.com would allow the cookie to be used on all subdomains of example.com)
-    REMEMBER_COOKIE_DOMAIN = None
-    # Limits the “Remember Me” cookie to a certain path
-    REMEMBER_COOKIE_PATH = "/"
-    # Restricts the “Remember Me” cookie’s scope to secure channels (typically HTTPS)
-    REMEMBER_COOKIE_SECURE = False
-    # Prevents the “Remember Me” cookie from being accessed by client-side scripts
-    REMEMBER_COOKIE_HTTPONLY = True
-    # If set to True the cookie is refreshed on every request,
-    # which bumps the lifetime. Works like Flask’s SESSION_REFRESH_EACH_REQUEST
-    REMEMBER_COOKIE_REFRESH_EACH_REQUEST = False
-    # Restricts the “Remember Me” cookie to first-party or same-site context
-    REMEMBER_COOKIE_SAMESITE = None
 
     # Logging
 
@@ -92,7 +78,7 @@ class Config:
 class DevelopmentConfig(Config):
     """Development configuration."""
 
-    TOKEN_EXPIRE_MINUTES = 15
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(minutes=15)
     DEBUG = True
 
 
@@ -100,23 +86,35 @@ class TestingConfig(Config):
     """Testing configuration."""
 
     TESTING = True
+    DEBUG = True
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(seconds=5)
+
+    @property
+    def SQLALCHEMY_DATABASE_URI(self) -> str:  # noqa: N802
+        """Get a database uri."""
+        return "sqlite:///:memory:"
 
 
 class ProductionConfig(Config):
     """Production configuration."""
 
-    TOKEN_EXPIRE_HOURS = 1
+    JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=12)
     BCRYPT_LOG_ROUNDS = 13
     PRESERVE_CONTEXT_ON_EXCEPTION = None
 
 
 _ENV_CONFIG_DICT = {
-    "dev": DevelopmentConfig,
-    "test": TestingConfig,
-    "prod": ProductionConfig,
+    "development": DevelopmentConfig,
+    "testing": TestingConfig,
+    "production": ProductionConfig,
 }
 
 
 def get_config(config_name: ConfigName) -> Config:
-    """Retrieve environment configuration settings."""
+    """
+    Get environment configuration settings.
+
+    :param config_name: Name of the config (should correspond to FLASK_ENV).
+    :return: A configuration object for the Flask app.
+    """
     return _ENV_CONFIG_DICT.get(config_name, ProductionConfig)()
