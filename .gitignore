@@ -134,3 +134,4 @@ dmypy.json
 notes.txt
 sandbox.py
 google_oauth.json
+tmp*.py
