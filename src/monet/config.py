@@ -18,6 +18,7 @@ class Config:
     PRESERVE_CONTEXT_ON_EXCEPTION: bool | None = True
     EXPLAIN_TEMPLATE_LOADING = False
     SESSION_COOKIE_SAMESITE = "Lax"
+    PROPAGATE_EXCEPTIONS = True
 
     TESTING = False
     DEBUG = False

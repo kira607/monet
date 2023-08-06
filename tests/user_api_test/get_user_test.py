@@ -41,6 +41,21 @@ def test_get_user_no_token(client: FlaskClient, db: SQLAlchemy) -> None:
     assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN
 
 
+def test_get_user_no_header(client: FlaskClient, db: SQLAlchemy) -> None:
+    """Test get user API request with no header provided.
+
+    Checks:
+    - Response has a valid structure.
+    """
+    register_user(client)
+    login_user(client)
+    response = client.get(url_for("api.get_user"))
+    assert response.status_code == HTTPStatus.UNAUTHORIZED
+    assert "message" in response.json and response.json["message"] == "Missing Authorization Header"
+    assert "WWW-Authenticate" in response.headers
+    assert response.headers["WWW-Authenticate"] == WWW_AUTH_NO_TOKEN
+
+
 def test_auth_user_expired_token(client: FlaskClient, db: SQLAlchemy) -> None:
     """Test get user API request when token has expired.
 
